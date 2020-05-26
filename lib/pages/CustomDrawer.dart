@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siddur/blocs/page_changer.dart';
 import 'package:siddur/blocs/theme.dart';
 
@@ -28,9 +29,11 @@ class CustomDrawerState extends State<CustomDrawer>
 
   Widget mainScreen;
 
+
   @override
-  void initState() {
+  void initState()  {
     super.initState();
+
     _animationController = AnimationController(
       vsync: this,
       duration: CustomDrawerState.toggleDuration,
@@ -218,8 +221,10 @@ class MyDrawer extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
                         icon: Icon(Icons.lightbulb_outline),
-                        onPressed: () {
+                        onPressed: () async{
                           _themeChanger.switchThem();
+                          await saveThemePreference(_themeChanger.isDark());
+
                         },
                       ),
                     ),
@@ -231,5 +236,9 @@ class MyDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+  saveThemePreference(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isThemeBrightnessDark', value);
   }
 }
