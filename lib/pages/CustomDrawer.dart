@@ -168,15 +168,26 @@ class MyDrawer extends StatelessWidget {
                   ListTile(
                       onTap: () {
                         _pageChanger.setPageIndex(0);
+                        CustomDrawer.of(context).close();
                       },
                       leading: Icon(Icons.brightness_2),
                       title: Text("Bed Time Shema")),
                   ListTile(
                       onTap: () {
                         _pageChanger.setPageIndex(1);
+                        CustomDrawer.of(context).close();
+
                       },
                       leading: Icon(Icons.wb_sunny),
                       title: Text("Morning Prayer")),
+                  ListTile(
+                      onTap: () {
+                        _pageChanger.setPageIndex(2);
+                        CustomDrawer.of(context).close();
+
+                      },
+                      leading: Icon(Icons.airplanemode_active),
+                      title: Text("Travel Prayer")),
                   Expanded(child: Container()),
                   Align(
                     alignment: Alignment.bottomCenter,
