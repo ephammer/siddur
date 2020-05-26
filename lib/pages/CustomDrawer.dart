@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:siddur/blocs/page_changer.dart';
 import 'package:siddur/blocs/theme.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -143,6 +144,7 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+    PageChanger _pageChanger = Provider.of<PageChanger>(context);
 
     return Material(
 //      color: Colors.indigo,
@@ -163,11 +165,12 @@ class MyDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ClipRRect(
-                    child: ListTile(onTap: () {
-                    }, title: Text("morning")),
-                    borderRadius: BorderRadius.circular(35.0),
-                  ),
+                  ListTile(
+                      onTap: () {
+                        _pageChanger.setPageIndex(0);
+                      },
+                      leading: Icon(Icons.brightness_2),
+                      title: Text("Bed Time Shema")),
                   Expanded(child: Container()),
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -175,7 +178,9 @@ class MyDrawer extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
                         icon: Icon(Icons.lightbulb_outline),
-                          onPressed:(){_themeChanger.switchThem();},
+                        onPressed: () {
+                          _themeChanger.switchThem();
+                        },
                       ),
                     ),
                   )
