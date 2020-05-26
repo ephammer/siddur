@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siddur/blocs/page_changer.dart';
 import 'package:siddur/blocs/theme.dart';
+import 'package:siddur/tools/hebrewcalendar/hebrew_date_formatter.dart';
+import 'package:siddur/tools/hebrewcalendar/jewish_calendar.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Widget child;
@@ -152,7 +154,15 @@ class MyDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     PageChanger _pageChanger = Provider.of<PageChanger>(context);
+    DateTime today = DateTime.now();
+    DateTime nextShabbos = today;
+    if(nextShabbos.weekday!=6)
+      {
+        var daysToAdd = 6-nextShabbos.weekday;
 
+        nextShabbos = nextShabbos.add(Duration(days: daysToAdd));
+
+      }
     return Material(
 //      color: Colors.indigo,
       child: SafeArea(
@@ -172,6 +182,45 @@ class MyDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Center(
+                    child: Text(
+                      JewishCalendar.fromDateTime(today).toString(),
+                      style: GoogleFonts.secularOne(),
+                    ),
+                  ),
+                  (HebrewDateFormatter().formatParsha(new JewishCalendar.fromDateTime(nextShabbos))!="")?Center(
+                    child: Text(
+                      HebrewDateFormatter().formatParsha(new JewishCalendar.fromDateTime(nextShabbos)),
+                      style: GoogleFonts.secularOne(),
+                    ),
+                  ):Container(),
+//                  Center(
+//                    child: Text(
+//                        JewishCalendar.fromDateTime(today).getDafYomiBavli().getDaf().toString()+ " "+JewishCalendar.fromDateTime(DateTime.now()).getDafYomiBavli().getMasechta().toString(),
+//                      style: GoogleFonts.secularOne(),
+//                    ),
+//                  ),
+                  (JewishCalendar.fromDateTime(today).getDayOfOmer()!=-1)
+                      ?Padding(
+                        padding: const EdgeInsets.only(bottom:16.0),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                JewishCalendar.fromDateTime(today).getDayOfOmer().toString(),
+                                style: GoogleFonts.secularOne(color: Colors.redAccent),
+                              ),
+                              Text(
+                                "  days of the Omer",
+                                style: GoogleFonts.secularOne(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                  :Container(),
                   ListTile(
                       onTap: () {
                         _pageChanger.setPageIndex(0);

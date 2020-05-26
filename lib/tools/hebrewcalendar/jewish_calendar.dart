@@ -491,7 +491,6 @@ class JewishCalendar extends JewishDate {
       // return "";
       return -1;
     }
-
     // kvia = whether arrow_expand Jewish year is short/regular/long (0/1/2)
     // roshHashana = Rosh Hashana of this Jewish year
     // roshHashanaDay= day of week Rosh Hashana was on this year
@@ -511,7 +510,6 @@ class JewishCalendar extends JewishDate {
 
     // week is the week since the first Shabbos on or after Rosh Hashana
     week = ((getAbsDate() - roshHashana.getAbsDate()) - (7 - roshHashanaDay)) ~/ 7;
-
     // determine appropriate array
     if (!isJewishLeapYear()) {
       switch (roshHashanaDay) {
@@ -542,6 +540,7 @@ class JewishCalendar extends JewishDate {
           }
           break;
       }
+
     } else { // if leap year
       switch (roshHashanaDay) {
         case 7: // RH was on arrow_expand Sat
@@ -571,7 +570,9 @@ class JewishCalendar extends JewishDate {
           }
           break;
       }
+
     }
+
     // if something goes wrong
     if (array == null) {
       throw new ArgumentError(
