@@ -1,8 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ThemeChanger with ChangeNotifier {
+  static final _textThemeDark = GoogleFonts.rajdhaniTextTheme()
+      .apply(bodyColor: Colors.white70, displayColor: Colors.white30);
+  static final _textThemeLight = GoogleFonts.rajdhaniTextTheme()
+      .apply(bodyColor: Colors.black, displayColor: Colors.black45,decorationColor: Colors.black,);
+
   final darkTheme = ThemeData(
     primarySwatch: Colors.grey,
     primaryColor: Colors.black,
@@ -11,8 +15,7 @@ class ThemeChanger with ChangeNotifier {
     accentColor: Colors.white,
     accentIconTheme: IconThemeData(color: Colors.black),
     dividerColor: Colors.black54,
-    textTheme: GoogleFonts.rajdhaniTextTheme(),
-
+    textTheme: _textThemeDark,
   );
   final lightTheme = ThemeData(
     primarySwatch: Colors.grey,
@@ -22,7 +25,10 @@ class ThemeChanger with ChangeNotifier {
     accentColor: Colors.black,
     accentIconTheme: IconThemeData(color: Colors.white),
     dividerColor: Colors.white54,
-    textTheme: GoogleFonts.ralewayTextTheme(),
+    textTheme: _textThemeLight,
+    textSelectionColor: Colors.black45,
+      selectedRowColor: Colors.black45,
+    textSelectionHandleColor: Colors.black45,
 
   );
 
@@ -30,7 +36,8 @@ class ThemeChanger with ChangeNotifier {
 
   ThemeChanger(this._isDarkTheme);
 
-  getTheme() => _isDarkTheme?darkTheme:lightTheme;
+  getTheme() => _isDarkTheme ? darkTheme : lightTheme;
+
   switchThem() {
     _isDarkTheme = !_isDarkTheme;
     notifyListeners();

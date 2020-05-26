@@ -166,8 +166,6 @@ class MyDrawer extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                      selected: _pageChanger.getPageIndex()==0,
-
                       onTap: () {
                         _pageChanger.setPageIndex(0);
                         CustomDrawer.of(context).close();
@@ -175,7 +173,6 @@ class MyDrawer extends StatelessWidget {
                       leading: Icon(Icons.brightness_2),
                       title: Text("Bed Time Shema")),
                   ListTile(
-                      selected: _pageChanger.getPageIndex()==1,
 
                       onTap: () {
                         _pageChanger.setPageIndex(1);
@@ -185,7 +182,6 @@ class MyDrawer extends StatelessWidget {
                       leading: Icon(Icons.wb_sunny),
                       title: Text("Morning Prayer")),
                   ListTile(
-                    selected: _pageChanger.getPageIndex()==2,
                       onTap: () {
                         _pageChanger.setPageIndex(2);
                         CustomDrawer.of(context).close();
@@ -202,7 +198,14 @@ class MyDrawer extends StatelessWidget {
                       },
                       leading: Icon(Icons.brightness_1),
                       title: Text("Moon Prayer")),
+                  ListTile(
+                      onTap: () {
+                        _pageChanger.setPageIndex(4);
+                        CustomDrawer.of(context).close();
 
+                      },
+                      leading: Icon(Icons.library_books),
+                      title: Text("Study Prayer")),
 
                   Expanded(child: Container()),
                   Align(
