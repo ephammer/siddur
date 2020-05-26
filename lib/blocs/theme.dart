@@ -38,6 +38,8 @@ class ThemeChanger with ChangeNotifier {
 
   getTheme() => _isDarkTheme ? darkTheme : lightTheme;
 
+  isDark() => _isDarkTheme;
+
   switchThem() {
     _isDarkTheme = !_isDarkTheme;
     notifyListeners();

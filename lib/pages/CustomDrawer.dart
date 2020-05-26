@@ -18,7 +18,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class CustomDrawerState extends State<CustomDrawer>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin , WidgetsBindingObserver{
   static const Duration toggleDuration = Duration(milliseconds: 250);
   static const double maxSlide = 225;
   static const double minDragStartEdge = 60;
@@ -34,7 +34,10 @@ class CustomDrawerState extends State<CustomDrawer>
     _animationController = AnimationController(
       vsync: this,
       duration: CustomDrawerState.toggleDuration,
+
     );
+    WidgetsBinding.instance.addObserver(this);
+
   }
 
   void close() => _animationController.reverse();
@@ -46,9 +49,10 @@ class CustomDrawerState extends State<CustomDrawer>
   @override
   void dispose() {
     _animationController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     mainScreen = widget.child;
