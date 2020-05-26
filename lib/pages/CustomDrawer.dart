@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:siddur/blocs/theme.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Widget child;
@@ -20,6 +24,8 @@ class CustomDrawerState extends State<CustomDrawer>
   static const double maxDragStartEdge = maxSlide - 16;
   AnimationController _animationController;
   bool _canBeDragged = false;
+
+  Widget mainScreen;
 
   @override
   void initState() {
@@ -44,6 +50,8 @@ class CustomDrawerState extends State<CustomDrawer>
 
   @override
   Widget build(BuildContext context) {
+    mainScreen = widget.child;
+
     return WillPopScope(
       onWillPop: () async {
         if (_animationController.isCompleted) {
@@ -58,7 +66,7 @@ class CustomDrawerState extends State<CustomDrawer>
         onHorizontalDragEnd: _onDragEnd,
         child: AnimatedBuilder(
           animation: _animationController,
-          child: widget.child,
+          child: mainScreen,
           builder: (context, child) {
             double animValue = _animationController.value;
             final slideAmount = maxSlide * animValue;
@@ -74,9 +82,15 @@ class CustomDrawerState extends State<CustomDrawer>
                   child: GestureDetector(
                     onTap: _animationController.isCompleted ? close : null,
                     child: _animationController.value != 0
-                        ? ClipRRect(
-                            child: child,
-                            borderRadius: BorderRadius.circular(35.0),
+                        ? Card(
+                            elevation: _animationController.value * 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(35.0),
+                            ),
+                            child: ClipRRect(
+                              child: child,
+                              borderRadius: BorderRadius.circular(35.0),
+                            ),
                           )
                         : child,
                   ),
@@ -128,30 +142,47 @@ class CustomDrawerState extends State<CustomDrawer>
 class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+
     return Material(
-      color: Colors.indigo,
+//      color: Colors.indigo,
       child: SafeArea(
-        child: Theme(
-          data: ThemeData(brightness: Brightness.dark),
-          child: Row(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 1.83,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width / 1.83,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(
                       child: Text(
-                        "Siddur"
-                      ,style: TextStyle(fontSize: 24),),
+                        "סידור",
+                        style: GoogleFonts.secularOne(fontSize: 35),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  ClipRRect(
+                    child: ListTile(onTap: () {
+                    }, title: Text("morning")),
+                    borderRadius: BorderRadius.circular(35.0),
+                  ),
+                  Expanded(child: Container()),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: Icon(Icons.lightbulb_outline),
+                          onPressed:(){_themeChanger.switchThem();},
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
