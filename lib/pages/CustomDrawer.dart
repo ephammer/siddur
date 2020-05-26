@@ -171,6 +171,12 @@ class MyDrawer extends StatelessWidget {
                       },
                       leading: Icon(Icons.brightness_2),
                       title: Text("Bed Time Shema")),
+                  ListTile(
+                      onTap: () {
+                        _pageChanger.setPageIndex(1);
+                      },
+                      leading: Icon(Icons.wb_sunny),
+                      title: Text("Morning Prayer")),
                   Expanded(child: Container()),
                   Align(
                     alignment: Alignment.bottomCenter,

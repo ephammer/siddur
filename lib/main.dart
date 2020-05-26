@@ -47,32 +47,8 @@ class _MaterialApp extends StatelessWidget {
     Widget child = mainScreen.getPage();
     child = CustomDrawer(child: child);
     return new MaterialApp(
-      title: 'Siddur',
       theme: theme.getTheme(),
-
-//        ThemeData(
-////        primarySwatch: Colors.indigo,
-//            primaryColor: Color(0xffffffff),
-//            primaryColorBrightness: Brightness.light,
-//            primaryColorDark: Color(0xffcccccc),
-//            accentColor: Color(0xff9b0000),
-//            brightness: Brightness.light,
-//            textTheme: GoogleFonts.ralewayTextTheme(),
-//            primaryTextTheme: GoogleFonts.ralewayTextTheme(),
-//            colorScheme: ColorScheme(
-//                primary: Color(0xffffffff),
-//                primaryVariant: Color(0xffcccccc),
-//                secondary: Color(0xffd50000),
-//                secondaryVariant: Color(0xff9b0000),
-//                surface: Color(0xffffffff),
-//                background: Color(0xffffffff),
-//                error: Color(0xffd50000),
-//                onPrimary: Color(0xff000000),
-//                onSecondary: Color(0xffffffff),
-//                onSurface: Color(0xff000000),
-//                onBackground: Color(0xff000000),
-//                onError: Color(0xffd50000),
-//                brightness: Brightness.light)),
+      title: 'Siddur',
       home: child,
     );
   }

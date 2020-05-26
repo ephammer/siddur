@@ -5,17 +5,16 @@ import 'package:google_fonts/google_fonts.dart';
 class ThemeChanger with ChangeNotifier {
   final darkTheme = ThemeData(
     primarySwatch: Colors.grey,
-    textTheme: GoogleFonts.ralewayTextTheme(),
-    primaryColor: Colors.black45,
+    primaryColor: Colors.black,
     brightness: Brightness.dark,
     backgroundColor: Color(0xFF000000),
     accentColor: Colors.white,
     accentIconTheme: IconThemeData(color: Colors.black),
     dividerColor: Colors.black54,
+    textTheme: GoogleFonts.rajdhaniTextTheme(),
+
   );
   final lightTheme = ThemeData(
-    textTheme: GoogleFonts.ralewayTextTheme(),
-
     primarySwatch: Colors.grey,
     primaryColor: Colors.white,
     brightness: Brightness.light,
@@ -23,6 +22,8 @@ class ThemeChanger with ChangeNotifier {
     accentColor: Colors.black,
     accentIconTheme: IconThemeData(color: Colors.white),
     dividerColor: Colors.white54,
+    textTheme: GoogleFonts.ralewayTextTheme(),
+
   );
 
   bool _isDarkTheme = true;
