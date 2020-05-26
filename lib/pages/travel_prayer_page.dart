@@ -20,7 +20,7 @@ class TravelPrayer extends StatelessWidget {
             );
           },
         ),
-        title: Text('Bed Time Shema'),
+        title: Text('Travel Prayer'),
       ),
       body: Center(
           child: ListView(
