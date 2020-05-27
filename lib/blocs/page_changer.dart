@@ -5,6 +5,7 @@ import 'package:siddur/pages/moon_prayer_page.dart';
 import 'package:siddur/pages/morning_prayer_page.dart';
 import 'package:siddur/pages/study_prayer_page.dart';
 import 'package:siddur/pages/travel_prayer_page.dart';
+import 'package:siddur/pages/zmanim_page.dart';
 
 class PageChanger extends ChangeNotifier{
 
@@ -14,6 +15,7 @@ class PageChanger extends ChangeNotifier{
     TravelPrayer(),
     MoonPrayerPage(),
     StudyPrayerPage(),
+    ZmanimPage(),
   ];
 
   int _chosenPageIndex = 0;

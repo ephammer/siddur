@@ -19,7 +19,7 @@ class StudyPrayerPage extends StatelessWidget {
             );
           },
         ),
-        title: Text('Study Prayer'),
+        title: Text('Study Prayer',style: GoogleFonts.merriweather(),),
       ),
       body: Center(
           child: ListView(

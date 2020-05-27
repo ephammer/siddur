@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:siddur/tools/hebrewcalendar/jewish_calendar.dart';
 
 import 'CustomDrawer.dart';
 
@@ -19,7 +20,10 @@ class MorningPragerPage extends StatelessWidget {
             );
           },
         ),
-        title: Text('Morning Prayer'),
+        title: Text(
+          'Morning Prayer',
+          style: GoogleFonts.merriweather(),
+        ),
       ),
       body: Center(
           child: ListView(
@@ -204,24 +208,19 @@ class MorningPragerPage extends StatelessWidget {
               style: GoogleFonts.suezOne(fontSize: 24),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "בר״ח מוסיפים:",
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
-              style: GoogleFonts.suezOne(fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "בְרָאשֵׁי חָדְשֵׁיכֶם תַּקְרִיבוּ עלָה לה\', פָּרִים בְּנֵי בָקָר שְׁנַיִם וְאַיִל אֶחָד, כְּבָשים בְּנֵי שָׁנָה שִׁבְעָה תְּמִימִים: וּשְׁלשָׁה עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַפָּר הָאֶחָד, וּשְׁנֵי עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לָאַיִל הָאֶחָד: וְעִשּרן עִשּרון סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַכֶּבֶש הָאֶחָד, עלָה רֵיחַ נִיחחַ אִשֶּׁה לה\': וְנִסְכֵּיהֶם, חֲצִי הַהִין יִהְיֶה לַפָּר, וּשְׁלִישִׁת הַהִין לָאַיִל, וּרְבִיעִת הַהִין לַכֶּבֶש יָיִן, זאת עלַת חדֶשׁ בְּחָדְשׁו לְחָדְשֵׁי הַשָּׁנָה: וּשעִיר עִזִּים אֶחָד לְחַטָּאת לה\', עַל עלַת הַתָּמִיד יֵעָשה וְנִסְכּו:",
-              textAlign: TextAlign.justify,
-              textDirection: TextDirection.rtl,
-              style: GoogleFonts.suezOne(fontSize: 24),
-            ),
-          ),
+
+          (JewishCalendar.fromDateTime(DateTime.now()).isRoshChodesh())
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "בְרָאשֵׁי חָדְשֵׁיכֶם תַּקְרִיבוּ עלָה לה\', פָּרִים בְּנֵי בָקָר שְׁנַיִם וְאַיִל אֶחָד, כְּבָשים בְּנֵי שָׁנָה שִׁבְעָה תְּמִימִים: וּשְׁלשָׁה עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַפָּר הָאֶחָד, וּשְׁנֵי עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לָאַיִל הָאֶחָד: וְעִשּרן עִשּרון סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַכֶּבֶש הָאֶחָד, עלָה רֵיחַ נִיחחַ אִשֶּׁה לה\': וְנִסְכֵּיהֶם, חֲצִי הַהִין יִהְיֶה לַפָּר, וּשְׁלִישִׁת הַהִין לָאַיִל, וּרְבִיעִת הַהִין לַכֶּבֶש יָיִן, זאת עלַת חדֶשׁ בְּחָדְשׁו לְחָדְשֵׁי הַשָּׁנָה: וּשעִיר עִזִּים אֶחָד לְחַטָּאת לה\', עַל עלַת הַתָּמִיד יֵעָשה וְנִסְכּו:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(
+                        fontSize: 24, color: Colors.redAccent),
+                  ),
+                )
+              : Container(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

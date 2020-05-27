@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ThemeChanger with ChangeNotifier {
-  static final _textThemeDark = GoogleFonts.rajdhaniTextTheme()
+  static final _textThemeDark = GoogleFonts.merriweatherTextTheme()
       .apply(bodyColor: Colors.white70, displayColor: Colors.white30);
-  static final _textThemeLight = GoogleFonts.rajdhaniTextTheme()
+  static final _textThemeLight = GoogleFonts.merriweatherTextTheme()
       .apply(bodyColor: Colors.black, displayColor: Colors.black45,decorationColor: Colors.black,);
 
   final darkTheme = ThemeData(

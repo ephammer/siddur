@@ -19,7 +19,7 @@ class BedTimeShema extends StatelessWidget {
             );
           },
         ),
-        title: Text('Bed Time Shema'),
+        title: Text('Bed Time Shema',style: GoogleFonts.merriweather(),),
       ),
       body: Center(
           child: ListView(

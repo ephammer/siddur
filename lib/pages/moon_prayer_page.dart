@@ -19,7 +19,7 @@ class MoonPrayerPage extends StatelessWidget {
             );
           },
         ),
-        title: Text('Moon Prayer'),
+        title: Text('Moon Prayer',style: GoogleFonts.merriweather(),),
       ),
       body: Center(
           child: ListView(

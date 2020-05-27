@@ -246,7 +246,6 @@ class MyDrawer extends StatelessWidget {
                       leading: Icon(Icons.airplanemode_active),
                       title: Text("Travel Prayer")),
                   ListTile(
-                      selected: _pageChanger.getPageIndex()==3,
                       onTap: () {
                         _pageChanger.setPageIndex(3);
                         CustomDrawer.of(context).close();
@@ -262,8 +261,27 @@ class MyDrawer extends StatelessWidget {
                       },
                       leading: Icon(Icons.library_books),
                       title: Text("Study Prayer")),
-
+//                  ListTile(
+//                      onTap: () {
+//                        _pageChanger.setPageIndex(5);
+//                        CustomDrawer.of(context).close();
+//
+//                      },
+//                      leading: Icon(Icons.library_books),
+//                      title: Text("Zmanim")),
                   Expanded(child: Container()),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ListTile(
+                        onTap: () {
+                          _pageChanger.setPageIndex(4);
+                          CustomDrawer.of(context).close();
+
+                        },
+                        leading: Icon(Icons.info_outline),
+                        title: Text("About")
+                    ),
+                  ),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(

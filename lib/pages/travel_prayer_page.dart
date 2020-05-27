@@ -20,7 +20,7 @@ class TravelPrayer extends StatelessWidget {
             );
           },
         ),
-        title: Text('Travel Prayer'),
+        title: Text('Travel Prayer',style: GoogleFonts.merriweather(),),
       ),
       body: Center(
           child: ListView(
