@@ -63,7 +63,8 @@ class _MaterialApp extends StatelessWidget {
     Widget child = mainScreen.getPage();
     child = CustomDrawer(child: child);
     return new MaterialApp(
-      theme: theme.getTheme(),
+        debugShowCheckedModeBanner: false,
+        theme: theme.getTheme(),
       title: 'Siddur',
       home: child,
     );

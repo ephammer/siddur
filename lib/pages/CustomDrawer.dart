@@ -7,6 +7,7 @@ import 'package:siddur/blocs/page_changer.dart';
 import 'package:siddur/blocs/theme.dart';
 import 'package:siddur/tools/hebrewcalendar/hebrew_date_formatter.dart';
 import 'package:siddur/tools/hebrewcalendar/jewish_calendar.dart';
+import 'package:siddur/tools/siddur_icons_icons.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Widget child;
@@ -226,7 +227,7 @@ class MyDrawer extends StatelessWidget {
                         _pageChanger.setPageIndex(0);
                         CustomDrawer.of(context).close();
                       },
-                      leading: Icon(Icons.brightness_2),
+                      leading: Icon(SiddurIcons.sleep),
                       title: Text("Bed Time Shema")),
                   ListTile(
 
@@ -235,7 +236,7 @@ class MyDrawer extends StatelessWidget {
                         CustomDrawer.of(context).close();
 
                       },
-                      leading: Icon(Icons.wb_sunny),
+                      leading: Icon(SiddurIcons.sun),
                       title: Text("Morning Prayer")),
                   ListTile(
                       onTap: () {
@@ -251,7 +252,7 @@ class MyDrawer extends StatelessWidget {
                         CustomDrawer.of(context).close();
 
                       },
-                      leading: Icon(Icons.brightness_1),
+                      leading: Icon(SiddurIcons.moon_full),
                       title: Text("Moon Prayer")),
                   ListTile(
                       onTap: () {
@@ -259,7 +260,7 @@ class MyDrawer extends StatelessWidget {
                         CustomDrawer.of(context).close();
 
                       },
-                      leading: Icon(Icons.library_books),
+                      leading: Icon(SiddurIcons.book_open),
                       title: Text("Study Prayer")),
 //                  ListTile(
 //                      onTap: () {
@@ -274,7 +275,7 @@ class MyDrawer extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: ListTile(
                         onTap: () {
-                          _pageChanger.setPageIndex(4);
+                          _pageChanger.setPageIndex(6);
                           CustomDrawer.of(context).close();
 
                         },
