@@ -780,4 +780,51 @@ class JewishCalendar extends JewishDate {
     return true;
   }
  */
+
+  bool isWinter(){
+    JewishDate sheminiHatzeret = JewishDate.initDate(jewishYear:this.jewishYear,jewishMonth:JewishDate.TISHREI, jewishDayOfMonth: 22);
+    JewishDate firstDayPessah = JewishDate.initDate(jewishYear:this.jewishYear,jewishMonth:JewishDate.NISSAN, jewishDayOfMonth: 14);
+    if (this.compareTo(sheminiHatzeret)!=-1 && this.compareTo(firstDayPessah)==-1) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isSummer(){
+    return !isWinter();
+  }
+
+  bool isTenDays(){
+    if(this.getJewishMonth() == JewishDate.TISHREI) {
+      if (this.getJewishDayOfMonth() <= 10) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  bool isTachanun(){
+    if(
+    this.isRoshChodesh()
+        || this.isChanukah()
+    || getYomTovIndex() == EREV_ROSH_HASHANA
+        || getYomTovIndex() == PURIM
+        || getYomTovIndex() == SHUSHAN_PURIM
+        || getYomTovIndex() == PURIM_KATAN
+        || this.getJewishMonth() == JewishDate.NISSAN
+        || getDayOfOmer() == 33
+        || getYomTovIndex() == TISHA_BEAV
+        || getYomTovIndex() == TU_BEAV
+        || getYomTovIndex() == EREV_YOM_KIPPUR){
+      return false;
+    }
+    else if(getJewishMonth()==JewishDate.TISHREI && getJewishDayOfMonth()<=18){
+      return false;
+    }
+    else if(getJewishMonth()==JewishDate.SIVAN && getJewishDayOfMonth()<=8){
+      return false;
+    }
+    return true;
+  }
 }
