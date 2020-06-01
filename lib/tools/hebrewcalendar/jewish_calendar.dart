@@ -827,4 +827,8 @@ class JewishCalendar extends JewishDate {
     }
     return true;
   }
+
+  bool isPurim(){
+    return getYomTovIndex() == PURIM;
+  }
 }
