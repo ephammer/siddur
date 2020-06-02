@@ -828,7 +828,47 @@ class JewishCalendar extends JewishDate {
     return true;
   }
 
+  bool isLamnatzeach(){
+    if(
+    this.isRoshChodesh()
+        || this.isChanukah()
+        || getYomTovIndex() == PURIM
+        || getYomTovIndex() == SHUSHAN_PURIM
+        || getYomTovIndex() == PURIM_KATAN
+        || getYomTovIndex() == CHOL_HAMOED_PESACH
+        || getYomTovIndex() == CHOL_HAMOED_SUCCOS
+        || getYomTovIndex() == TISHA_BEAV
+        || getYomTovIndex() == EREV_YOM_KIPPUR
+        || getYomTovIndex() == EREV_PESACH
+    ){
+      return false;
+    }
+    return true;
+  }
+
   bool isPurim(){
     return getYomTovIndex() == PURIM;
+  }
+
+  bool isHallel(){
+    if(
+    this.isRoshChodesh()
+        || this.isChanukah()
+        || getYomTovIndex() == CHOL_HAMOED_PESACH
+        || getYomTovIndex() == CHOL_HAMOED_SUCCOS
+    ){
+      return true;
+    }
+    return false;
+  }
+
+  bool isFullHallel(){
+    if(
+        this.isChanukah()
+        || getYomTovIndex() == CHOL_HAMOED_SUCCOS
+    ){
+      return true;
+    }
+    return false;
   }
 }

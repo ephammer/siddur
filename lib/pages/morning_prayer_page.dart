@@ -13,19 +13,26 @@ class MorningPragerPage extends StatefulWidget {
 }
 
 class _MorningPragerPageState extends State<MorningPragerPage> {
-
-  final ItemScrollController itemScrollController = ItemScrollController();
+  ItemScrollController itemScrollController;
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+
+  // TODO: Implement pinch to zoom
+  double _scaleFactor = 1.0;
+  double _baseScaleFactor = 1.0;
 
   final TODAY = DateTime.now();
   final JEWISH_DATE_TODAY = JewishCalendar.fromDateTime(DateTime.now());
   final IS_TAANITH = JewishCalendar.fromDateTime(DateTime.now()).isTaanis();
   final IS_TEN_DAYS = JewishCalendar.fromDateTime(DateTime.now()).isTenDays();
   final IS_TACHANUN = JewishCalendar.fromDateTime(DateTime.now()).isTachanun();
+  final IS_HALLEL = JewishCalendar.fromDateTime(DateTime.now()).isHallel();
   final IS_MONDAY_OR_TUESDAY = (DateTime.now().weekday == DateTime.monday ||
-      DateTime.now().weekday == DateTime.thursday)?true:false;
+          DateTime.now().weekday == DateTime.thursday)
+      ? true
+      : false;
 
+  int _scrollIndex = 0;
 
   final List<Widget> morningPrayers = [
     // Morning Prayers
@@ -193,7 +200,7 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "וַיּאמֶר ה\' אֶל משֶׁה קַח לְךָ סַמִּים נָטָף וּשְׁחֵלֶת וְחֶלְבְּנָה סַמִּים וּלְבנָה זַכָּה בַּד בְּבַד יִהְיֶה: וְעָשיתָ אתָהּ קְטרֶת רקַח מַעֲשה רוקֵחַ מְמֻלָּח טָהור קדֶשׁ: וְשָׁחַקְתָּ מִמֶּנָּה הָדֵק וְנָתַתָּה מִמֶּנָּה לִפְנֵי הָעֵדֻת בְּאהֶל מועֵד אֲשֶׁר אִוָּעֵד לְךָ שָׁמָּה קדֶשׁ קָדָשִׁים תִּהְיֶה לָכֶם: וְנֶאֱמַר וְהִקְטִיר עָלָיו אַהֲרן קְטרֶת סַמִּים בַּבּקֶר בַּבּקֶר בְּהֵיטִיבו אֶת הַנֵּרות יַקְטִירֶנָּה: וּבְהַעֲלת אַהֲרן אֶת הַנֵּרות בֵּין הָעַרְבַּיִם יַקְטִירֶנָּה קְטרֶת תָּמִיד לִפְנֵי ה\' לְדרתֵיכֶם:",
+            "וַיּאמֶר ה\' אֶל משֶׁה קַח לְךָ סַמִּים נָטָף וּשְׁחֵלֶת וְחֶלְבְּנָה סַמִּים וּלְבנָה זַכָּה בַּד בְּבַד יִהְיֶה: וְעָשיתָ אתָהּ קְטרֶת רקַח מַעֲשה רוקֵחַ מְמֻלָּח טָהור קדֶשׁ: וְשָׁחַקְתָּ מִמֶּנָּה הָדֵק וְנָתַתָּה מִמֶּנָּה לִפְנֵי הָעֵדֻת בְּאהֶל מועֵד אֲשֶׁר אִוָּעֵד לְךָ שָׁמָּה קדֶשׁ קָדָשִׁים תִּהְיֶה לָכֶם: וְהִקְטִיר עָלָיו אַהֲרן קְטרֶת סַמִּים בַּבּקֶר בַּבּקֶר בְּהֵיטִיבו אֶת הַנֵּרות יַקְטִירֶנָּה: וּבְהַעֲלת אַהֲרן אֶת הַנֵּרות בֵּין הָעַרְבַּיִם יַקְטִירֶנָּה קְטרֶת תָּמִיד לִפְנֵי ה\' לְדרתֵיכֶם:",
             textAlign: TextAlign.justify,
             textDirection: TextDirection.rtl,
             style: GoogleFonts.suezOne(fontSize: 24),
@@ -862,6 +869,14 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
                   textDirection: TextDirection.rtl,
                   style: GoogleFonts.suezOne(fontSize: 24),
                 )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "תְּקַע בְּשׁופָר גָּדול לְחֵרוּתֵנוּ. וְשא נֵס לְקַבֵּץ גָּלֻיּותֵינוּ. וְקַבְּצֵנוּ יַחַד מֵאַרְבַּע כַּנְפות הָאָרֶץ. בָּרוּךְ אַתָּה ה', מְקַבֵּץ נִדְחֵי עַמּו יִשרָאֵל:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
         JewishCalendar.fromDateTime(DateTime.now()).isTenDays()
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -985,7 +1000,16 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
                   style: GoogleFonts.suezOne(fontSize: 24),
                 ))
             : Container(),
-        // TODO: Add purim
+        JewishCalendar.fromDateTime(DateTime.now()).isPurim()
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "עַל הַנִּסִּים וְעַל הַפֻּרְקָן וְעַל הַגְּבוּרות וְעַל הַתְּשׁוּעות וְעַל הַמִּלְחָמות שֶׁעָשיתָ לַאֲבותֵינוּ בַּיָּמִים הָהֵם בִּזְּמַן הַזֶּה:\nבִּימֵי מָרְדְּכַי וְאֶסְתֵּר בְּשׁוּשַׁן הַבִּירָה. כְּשֶׁעָמַד עֲלֵיהֶם הָמָן הָרָשָׁע. בִּקֵּשׁ לְהַשְׁמִיד לַהֲרוג וּלְאַבֵּד אֶת כָּל הַיְּהוּדִים מִנַּעַר וְעַד זָקֵן טַף וְנָשִׁים בְּיום אֶחָד. בִּשְׁלשָׁה עָשר לְחדֶשׁ שְׁנֵים עָשר. הוּא חדֶשׁ אֲדָר. וּשְׁלָלָם לָבוז: וְאַתָּה בְּרַחֲמֶיךָ הָרַבִּים. הֵפַרְתָּ אֶת עֲצָתו. וְקִלְקַלְתָּ אֶת מַחֲשַׁבְתּו. וַהֲשֵׁבותָ לּו גְּמוּלו בְּראשׁו. וְתָלוּ אותו וְאֶת בָּנָיו עַל הָעֵץ.",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                ))
+            : Container(),
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -1056,7 +1080,125 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
             )),
       ],
     ),
-    // TODO: add hallel
+    // Hallel
+    (JewishCalendar.fromDateTime(DateTime.now()).isHallel())
+        ? Column(
+            children: [
+              (JewishCalendar.fromDateTime(DateTime.now()).isFullHallel())
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        "בָּרוּךְ אַתָּה ה' אֱלהֵינוּ מֶלֶךְ הָעולָם. אֲשֶׁר קִדְּשָׁנוּ בְּמִצְותָיו וְצִוָּנוּ לִקְרא אֶת הַהַלֵּל:",
+                        textAlign: TextAlign.justify,
+                        textDirection: TextDirection.rtl,
+                        style: GoogleFonts.suezOne(fontSize: 24),
+                      ))
+                  : Container(),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "הַלְלוּיָהּ הַלְלוּ עַבְדֵי יְהֹוָה הַלְלוּ אֶת שֵׁם יְהֹוָה: יְהִי שֵׁם יְהֹוָה מְבֹרָךְ מֵעַתָּה וְעַד־עוֹלָם: מִמִּזְרַח־שֶֽׁמֶשׁ עַד־מְבוֹאוֹ מְהֻלָּל שֵׁם יְהֹוָה: רָם עַל־כָּל־גּוֹיִם יְהֹוָה עַל הַשָּׁמַֽיִם כְּבוֹדוֹ: מִי כַּיהֹוָה אֱלֹהֵֽינוּ הַמַּגְבִּיהִי לָשָֽׁבֶת: הַמַּשְׁפִּילִי לִרְאוֹת בַּשָּׁמַֽיִם וּבָאָֽרֶץ: מְקִימִי מֵעָפָר דָּל מֵאַשְׁפֹּת יָרִים אֶבְיוֹן: לְהוֹשִׁיבִי עִם־נְדִיבִים עִם נְדִיבֵי עַמּוֹ: מוֹשִׁיבִי עֲקֶֽרֶת הַבַּֽיִת אֵם־הַבָּנִים שְׂמֵחָה הַלְלוּיָהּ:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "בְּצֵאת יִשְׂרָאֵל מִמִּצְרָֽיִם בֵּית יַעֲקֹב מֵעַם לֹעֵז: הָיְתָה יְהוּדָה לְקָדְשׁוֹ יִשְׂרָאֵל מַמְשְׁלוֹתָיו: הַיָּם רָאָה וַיָּנֹס הַיַּרְדֵּן יִסֹּב לְאָחוֹר: הֶהָרִים רָקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי־צֹאן: מַה־לְּךָ הַיָּם כִּי תָנוּס הַיַּרְדֵּן תִּסֹּב לְאָחוֹר: הֶהָרִים תִּרְקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי־צֹאן: מִלִּפְנֵי אָדוֹן חֽוּלִי אָֽרֶץ מִלִּפְנֵי אֱלֽוֹהַּ יַעֲקֹב: הַהֹפְכִי הַצּוּר אֲגַם־מָֽיִם חַלָּמִישׁ לְמַעְיְנוֹ־מָֽיִם:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
+              ?Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "לֹא לָֽנוּ יְהֹוָה לֹא לָֽנוּ כִּי לְשִׁמְךָ תֵּן כָּבוֹד עַל־חַסְדְּךָ עַל־אֲמִתֶּֽךָ: לָֽמָּה יֹאמְרוּ הַגּוֹיִם אַיֵּה־נָא אֱלֹהֵיהֶם: וֵאלֹהֵֽינוּ בַשָּׁמָֽיִם כֹּל אֲשֶׁר־חָפֵץ עָשָׂה: עֲצַבֵּיהֶם כֶּֽסֶף וְזָהָב מַעֲשֵׂה יְדֵי אָדָם: פֶּה־לָהֶם וְלֹא יְדַבֵּֽרוּ עֵינַֽיִם לָהֶם וְלֹא יִרְאוּ: אָזְנַֽיִם לָהֶם וְלֹא יִשְׁמָֽעוּ אַף לָהֶם וְלֹא יְרִיחוּן: יְדֵיהֶם וְלֹא יְמִישׁוּן רַגְלֵיהֶם וְלֹא יְהַלֵּֽכוּ לֹא־יֶהְגּוּ בִּגְרוֹנָם: כְּמוֹהֶם יִהְיוּ עֹשֵׂיהֶם כֹּל אֲשֶׁר־בֹּטֵֽחַ בָּהֶם: יִשְׂרָאֵל בְּטַח בַּיהֹוָה עֶזְרָם וּמָגִנָּם הוּא: בֵּית אַהֲרֹן בִּטְחוּ בַיהֹוָה עֶזְרָם וּמָגִנָּם הוּא: יִרְאֵי יְהֹוָה בִּטְחוּ בַיהֹוָה עֶזְרָם וּמָגִנָּם הוּא:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  ))
+                  :Container(),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "יְהֹוָה זְכָרָֽנוּ יְבָרֵךְ יְבָרֵךְ אֶת־בֵּית יִשְׂרָאֵל יְבָרֵךְ אֶת־בֵּית אַהֲרֹן: יְבָרֵךְ יִרְאֵי יְהֹוָה הַקְּטַנִּים עִם־הַגְּדֹלִים: יֹסֵף יְהֹוָה עֲלֵיכֶם עֲלֵיכֶם וְעַל־בְּנֵיכֶם: בְּרוּכִים אַתֶּם לַיהֹוָה עֹשֵׂה שָׁמַֽיִם וָאָֽרֶץ: הַשָּׁמַֽיִם שָׁמַֽיִם לַיהֹוָה וְהָאָֽרֶץ נָתַן לִבְנֵי־אָדָם: לֹא־הַמֵּתִים יְהַלְלוּ־יָהּ וְלֹא כָּל־יֹרְדֵי דוּמָה: וַאֲנַֽחְנוּ נְבָרֵךְ יָהּ מֵעַתָּה וְעַד־עוֹלָם הַלְלוּיָהּ:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
+                  ?Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "אָהַֽבְתִּי כִּי־יִשְׁמַע יְהֹוָה אֶת־קוֹלִי תַּחֲנוּנָי: כִּי־הִטָּה אָזְנוֹ לִי וּבְיָמַי אֶקְרָא: אֲפָפֽוּנִי חֶבְלֵי־מָֽוֶת וּמְצָרֵי שְׁאוֹל מְצָאֽוּנִי צָרָה וְיָגוֹן אֶמְצָא: וּבְשֵׁם־יְהֹוָה אֶקְרָא אָנָּה יְהֹוָה מַלְּטָה נַפְשִׁי: חַנּוּן יְהֹוָה וְצַדִּיק וֵאלֹהֵֽינוּ מְרַחֵם: שֹׁמֵר פְּתָאיִם יְהֹוָה דַּלּוֹתִי וְלִי יְהוֹשִֽׁיעַ: שׁוּבִי נַפְשִׁי לִמְנוּחָֽיְכִי כִּי־יְהֹוָה גָּמַל עָלָֽיְכִי: כִּי חִלַּֽצְתָּ נַפְשִׁי מִמָּֽוֶת אֶת־עֵינִי מִן־דִּמְעָה אֶת־רַגְלִי מִדֶּֽחִי: אֶתְהַלֵּךְ לִפְנֵי יְהֹוָה בְּאַרְצוֹת הַחַיִּים: הֶאֱמַֽנְתִּי כִּי אֲדַבֵּר אֲנִי עָנִֽיתִי מְאֹד: אֲנִי אָמַֽרְתִּי בְחָפְזִי כָּל־הָאָדָם כֹּזֵב:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  ))
+                  :Container(),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "מָה־אָשִׁיב לַיהֹוָה כָּל־תַּגְמוּלֽוֹהִי עָלָי: כּוֹס־יְשׁוּעוֹת אֶשָּׂא וּבְשֵׁם יְהֹוָה אֶקְרָא: נְדָרַי לַיהֹוָה אֲשַׁלֵּם נֶגְדָה־נָּא לְכָל־עַמּוֹ: יָקָר בְּעֵינֵי יְהֹוָה הַמָּֽוְתָה לַחֲסִידָיו: אָנָּה יְהֹוָה כִּי־אֲנִי עַבְדֶּֽךָ אֲנִי־עַבְדְּךָ בֶּן־אֲמָתֶֽךָ פִּתַּֽחְתָּ לְמוֹסֵרָי: לְךָ־אֶזְבַּח זֶֽבַח תּוֹדָה וּבְשֵׁם יְהֹוָה אֶקְרָא: נְדָרַי לַיהֹוָה אֲשַׁלֵּם נֶגְדָה־נָּא לְכָל־עַמּוֹ: בְּחַצְרוֹת בֵּית יְהֹוָה בְּתוֹכֵֽכִי יְרוּשָׁלָֽםִ הַלְלוּיָהּ:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "הַלְלוּ אֶת־יְהֹוָה כָּל־גּוֹיִם שַׁבְּחֽוּהוּ כָּל־הָאֻמִּים: כִּי גָּבַר עָלֵֽינוּ חַסְדּוֹ וֶאֱמֶת־יְהֹוָה לְעוֹלָם הַלְלוּיָהּ:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמַר־נָא יִשְׂרָאֵל כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמְרוּ־נָא בֵית־אַהֲרֹן כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמְרוּ־נָא יִרְאֵי יְהֹוָה כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:",
+                    textAlign: TextAlign.center,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "מִן־הַמֵּצַר קָרָֽאתִי יָהּ עָנָֽנִי בַמֶּרְחָב יָהּ: יְהֹוָה לִי לֹא אִירָא מַה־יַּעֲשֶׂה לִי אָדָם: יְהֹוָה לִי בְּעֹזְרָי וַאֲנִי אֶרְאֶה בְשׂנְאָי: טוֹב לַחֲסוֹת בַּיהֹוָה מִבְּטֹֽחַ בָּאָדָם: טוֹב לַחֲסוֹת בַּיהֹוָה מִבְּטֹֽחַ בִּנְדִיבִים: כָּל־גּוֹיִם סְבָבֽוּנִי בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: סַבּֽוּנִי גַם־סְבָבֽוּנִי בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: סַבּֽוּנִי כִדְבֹרִים דֹּעֲכוּ כְּאֵשׁ קוֹצִים בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: דָּחֹה דְחִיתַֽנִי לִנְפֹּל וַיהֹוָה עֲזָרָֽנִי: עָזִּי וְזִמְרָת יָהּ וַיְהִי־לִי לִישׁוּעָה: קוֹל רִנָּה וִישׁוּעָה בְּאָהֳלֵי צַדִּיקִים יְמִין יְהֹוָה עֹֽשָׂה חָֽיִל: יְמִין יְהֹוָה רוֹמֵמָה יְמִין יְהֹוָה עֹֽשָׂה חָֽיִל: לֹא־אָמוּת כִּי־אֶחְיֶה וַאֲסַפֵּר מַעֲשֵׂי יָהּ: יַסֹּר יִסְּרַֽנִּי יָהּ וְלַמָּֽוֶת לֹא נְתָנָֽנִי: פִּתְחוּ־לִי שַֽׁעֲרֵי־צֶֽדֶק אָֽבֹא־בָם אוֹדֶה יָהּ: זֶה־הַשַּֽׁעַר לַיהֹוָה צַדִּיקִים יָבֹֽאוּ בוֹ: אוֹדְךָ כִּי עֲנִיתָֽנִי וַתְּהִי־לִי לִישׁוּעָה: אוֹדְךָ כִּי עֲנִיתָֽנִי וַתְּהִי־לִי לִישׁוּעָה: אֶֽבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה: אֶֽבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה: מֵאֵת יְהֹוָה הָֽיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵֽינוּ: מֵאֵת יְהֹוָה הָֽיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵֽינוּ: זֶה־הַיּוֹם עָשָׂה יְהֹוָה נָגִֽילָה וְנִשְׂמְחָה בוֹ: זֶה־הַיּוֹם עָשָׂה יְהֹוָה נָגִֽילָה וְנִשְׂמְחָה בוֹ:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "אָֽנָּא יְהֹוָה הוֹשִֽׁיעָה נָּא:\nאָֽנָּא יְהֹוָה הוֹשִֽׁיעָה נָּא:\nאָֽנָּא יְהֹוָה הַצְלִיחָה נָא:\nאָֽנָּא יְהֹוָה הַצְלִיחָה נָא:",
+                    textAlign: TextAlign.center,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "בָּרוּךְ הַבָּא בְּשֵׁם יְהֹוָה בֵּרַכְנוּכֶם מִבֵּית יְהֹוָה: בָּרוּךְ הַבָּא בְּשֵׁם יְהֹוָה בֵּרַכְנוּכֶם מִבֵּית יְהֹוָה: אֵל יְהֹוָה וַיָּֽאֶר לָֽנוּ אִסְרוּ־חַג בַּעֲבֹתִים עַד־קַרְנוֹת הַמִּזְבֵּֽחַ: אֵל יְהֹוָה וַיָּֽאֶר לָֽנוּ אִסְרוּ־חַג בַּעֲבֹתִים עַד־קַרְנוֹת הַמִּזְבֵּֽחַ: אֵלִי אַתָּה וְאוֹדֶֽךָ אֱלֹהַי אֲרוֹמְמֶֽךָ: אֵלִי אַתָּה וְאוֹדֶֽךָ אֱלֹהַי אֲרוֹמְמֶֽךָ: הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ: הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  )),
+              JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
+                  ?Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "יְהַלְלֽוּךָ יְהֹוָה אֱלֹהֵֽינוּ כָּל־מַעֲשֶֽׂיךָ וַחֲסִידֶֽיךָ צַדִּיקִים עוֹשֵׂי רְצוֹנֶֽךָ וְכָל עַמְּךָ בֵּית יִשְׂרָאֵל בְּרִנָּה יוֹדוּ וִיבָרְכוּ וִישַׁבְּחוּ וִיפָאֲרוּ וִישׁוֹרְרוּ וִירוֹמְמוּ וְיַעֲרִֽיצוּ וְיַקְדִּֽישׁוּ וְיַמְלִֽיכוּ אֶת שִׁמְךָ מַלְכֵּֽנוּ תָּמִיד. כִּי לְךָ טוֹב לְהוֹדוֹת וּלְשִׁמְךָ נָאֶה לְזַמֵּר. כִּי מֵעוֹלָם וְעַד עוֹלָם אַתָּה אֵל. בָּרוּךְ אַתָּה יְהֹוָה מֶֽלֶךְ מְהֻלָּל בַּתִּשְׁבָּחוֹת:",
+                    textAlign: TextAlign.justify,
+                    textDirection: TextDirection.rtl,
+                    style: GoogleFonts.suezOne(fontSize: 24),
+                  ))
+                  :Container(),
+            ],
+          )
+        : Container(),
     // Avinu Malkeinu
     Column(
       children: [
@@ -1445,15 +1587,16 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
               textDirection: TextDirection.rtl,
               style: GoogleFonts.suezOne(fontSize: 24),
             )),
-        // TODO: add lamnatzeah
-        Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "",
-              textAlign: TextAlign.justify,
-              textDirection: TextDirection.rtl,
-              style: GoogleFonts.suezOne(fontSize: 24),
-            )),
+        (JewishCalendar.fromDateTime(DateTime.now()).isLamnatzeach())
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "לַמְנַצֵּחַ מִזְמור לְדָוִד: יַעַנְךָ יְהוָה בְּיום צָרָה. יְשַׂגֶּבְךָ שֵׁם אֱלהֵי יַעֲקב: יִשְׁלַח עֶזְרְךָ מִקּדֶשׁ. וּמִצִּיּון יִסְעָדֶךָּ: יִזְכּר כָּל מִנְחתֶיךָ. וְעולָתְךָ יְדַשְּׁנֶה סֶלָה: יִתֶּן לְךָ כִלְבָבֶךָ. וְכָל עֲצָתְךָ יְמַלֵּא: נְרַנְּנָה בִּישׁוּעָתֶךָ. וּבְשֵׁם אֱלהֵינוּ נִדְגּל. יְמַלֵּא יְהוָה כָּל מִשְׁאֲלותֶיךָ: עַתָּה יָדַעְתִּי. כִּי הושִׁיעַ יְהוָה מְשִׁיחו. יַעֲנֵהוּ מִשְּׁמֵי קָדְשׁו. בִּגְבוּרות יֵשַׁע יְמִינו: אֵלֶּה בָרֶכֶב וְאֵלֶּה בַסּוּסִים. וַאֲנַחְנוּ בְּשֵׁם יְהוָה אֱלהֵינוּ נַזְכִּיר: הֵמָּה כָּרְעוּ וְנָפָלוּ. וַאֲנַחְנוּ קַמְנוּ וַנִּתְעודָד: יְהוָה הושִׁיעָה הַמֶּלֶךְ יַעֲנֵנוּ בְיום קָרְאֵנוּ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                ))
+            : Container(),
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -1502,8 +1645,8 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
                 child: ExpansionTile(
                   title: Center(
                       child: Text(
-                        "Kaddish",
-                      )),
+                    "Kaddish",
+                  )),
                   children: [
                     Text(
                       "יִתְגַּדֵּל וְיִתְקַדֵּשׁ שְׁמֵהּ רַבָּא.\nבְּעָלְמָא דִּי בְרָא כִּרְעוּתֵהּ וְיַמְלִיךְ מַלְכוּתֵהּ בְּחַיֵּיכון וּבְיומֵיכון וּבְחַיֵּי דְכָל בֵּית יִשרָאֵל, בַּעֲגָלָא וּבִזְמַן קָרִיב, וְאִמְרוּ אָמֵן.\nיְהֵא שְׁמֵהּ רַבָּא מְבָרַךְ לְעָלַם וּלְעָלְמֵי עָלְמַיָּא.\nיִתְבָּרַךְ וְיִשְׁתַּבַּח וְיִתְפָּאַר וְיִתְרומַם וְיִתְנַשׁא וְיִתְהַדַּר וְיִתְעַלֶּה שְׁמֵהּ דְּקֻדְשָׁא. בְּרִיךְ הוּא.\nלְעֵלָּא מִן כָּל בִּרְכָתָא וְשִׁירָתָא תֻּשְׁבְּחָתָא וְנֶחֱמָתָא דַּאֲמִירָן בְּעָלְמָא, וְאִמְרוּ אָמֵן.\n תִּתְקַבַּל צְלוֹתְהוֹן וּבָעוּתְהוֹן דְּכָל בֵּית יִשְׂרָאֵל קֳדָם אֲבוּהוֹן דִּי בִשְׁמַיָּא, וְאִמְרוּ אָמֵן.\n יְהֵא שְׁלָמָא רַבָּא מִן שְׁמַיָא וְחַיִּים עָלֵינו וְעַל כָּל יִשְׂרָאֵל וְאִמְרוּ אָמֵן:\n עוֹשֶׂה שָׁלוֹם בעשרת ימי תשובה: השלום בִּמְרוֹמָיו הוּא יַעֲשֶׂה שָׁלוֹם עָלֵינוּ וְעַל כָּל יִשְׂרָאֵל, וְאִמְרוּ אָמֵן:",
@@ -1515,7 +1658,6 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
                 ),
               ),
             )),
-
       ],
     ),
     // Aleinu
@@ -1541,7 +1683,6 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
     ),
     // Song of the day
     SongOfTheDay(),
-
   ];
 
   List<DropdownMenuItem<int>> dropDownMenuItems = [
@@ -1587,22 +1728,23 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
 //                  style: TextStyle(color: Theme.of(context).accentColor),
       ),
     ),
+
     DropdownMenuItem(
-      value: 9,
+      value: 10,
       child: Text(
         "Ashrei",
 //                  style: TextStyle(color: Theme.of(context).accentColor),
       ),
     ),
     DropdownMenuItem(
-      value: 10,
+      value: 11,
       child: Text(
         "Aleinu",
 //                  style: TextStyle(color: Theme.of(context).accentColor),
       ),
     ),
     DropdownMenuItem(
-      value: 11,
+      value: 12,
       child: Text(
         "Song of the day",
 //                  style: TextStyle(color: Theme.of(context).accentColor),
@@ -1615,65 +1757,100 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
   @override
   void initState() {
     super.initState();
-    if (IS_TAANITH ||
-        IS_TEN_DAYS) {
-      dropDownMenuItems.insert(5,DropdownMenuItem(
-        value: 6,
-        child: Text(
-          "Avinu Malkeinu",
+
+    itemScrollController = ItemScrollController();
+
+    if (IS_TAANITH || IS_TEN_DAYS) {
+      dropDownMenuItems.insert(
+          5,
+          DropdownMenuItem(
+            value: 7,
+            child: Text(
+              "Avinu Malkeinu",
 //                  style: TextStyle(color: Theme.of(context).accentColor),
-        ),
-      ));
+            ),
+          ));
     }
     if (IS_TACHANUN) {
-      dropDownMenuItems.insert(6,DropdownMenuItem(
-        value: 7,
-        child: Text(
-          "Tachanun",
+      dropDownMenuItems.insert(
+          6,
+          DropdownMenuItem(
+            value: 8,
+            child: Text(
+              "Tachanun",
 //                  style: TextStyle(color: Theme.of(context).accentColor),
-        ),
-      ));
+            ),
+          ));
     }
     if (IS_MONDAY_OR_TUESDAY) {
-      dropDownMenuItems.insert(7,DropdownMenuItem(
-        value: 8,
-        child: Text(
-          "Torah Reading",
+      dropDownMenuItems.insert(
+          7,
+          DropdownMenuItem(
+            value: 8,
+            child: Text(
+              "Torah Reading",
 //                  style: TextStyle(color: Theme.of(context).accentColor),
-        ),
-      ));
+            ),
+          ));
     }
+    if (IS_HALLEL) {
+      dropDownMenuItems.insert(
+          5,
+          DropdownMenuItem(
+            value: 6,
+            child: Text(
+              "HALLEL",
+//                  style: TextStyle(color: Theme.of(context).accentColor),
+            ),
+          ));
+    }
+
   }
 
+//   TODO: Implement autoscoll
+  void autoScroll(){
+//        itemScrollController.scrollTo(index:_scrollIndex+1,
+//            duration: Duration(seconds: 30),
+//            alignment: 0,
+//            curve: Curves.linear);
+  }
+  
   @override
   Widget build(BuildContext context) {
+
     itemPositionsListener.itemPositions.addListener(() {
       if (itemPositionsListener.itemPositions.value.length > 0) {
         int currentIndex =
             itemPositionsListener.itemPositions.value.elementAt(0).index;
+        setState(() {
+          _scrollIndex = currentIndex;
+        });
         if (currentIndex < dropDownMenuItems.length && currentIndex > -1) {
-          if (currentIndex == 6) {
-            if (IS_TAANITH ||IS_TEN_DAYS) {
+          if (currentIndex == 7) {
+            if (IS_TAANITH || IS_TEN_DAYS) {
               setState(() {
                 _value = currentIndex;
               });
             }
-          }
-          else if (currentIndex == 7) {
+          } else if (currentIndex == 8) {
             if (IS_TACHANUN) {
               setState(() {
                 _value = currentIndex;
               });
             }
-          }
-          else if (currentIndex == 8) {
+          } else if (currentIndex == 9) {
             if (IS_MONDAY_OR_TUESDAY) {
               setState(() {
                 _value = currentIndex;
               });
             }
-          }
-          else {
+          } else if (currentIndex == 6) {
+            if (IS_HALLEL) {
+              setState(() {
+                _value = currentIndex;
+              });
+            }
+          }else {
             setState(() {
               _value = currentIndex;
             });
@@ -1705,14 +1882,33 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
           value: _value,
         ),
       ),
-      body: Center(
-          child: ScrollablePositionedList.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: morningPrayers.length,
-        itemBuilder: (context, index) => morningPrayers[index],
-        itemScrollController: itemScrollController,
-        itemPositionsListener: itemPositionsListener,
-      )),
+      body: GestureDetector(
+        onDoubleTap: () {
+          autoScroll();
+        },
+        onScaleStart: (details) {
+          _baseScaleFactor = _scaleFactor;
+        },
+        onScaleUpdate: (details) {
+          print(details.scale);
+          setState(() {
+            _scaleFactor = _baseScaleFactor * details.scale;
+          });
+        },
+        child: Center(
+            child: ScrollablePositionedList.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: morningPrayers.length,
+          itemBuilder: (context, index) => morningPrayers[index],
+          itemScrollController: itemScrollController,
+          itemPositionsListener: itemPositionsListener,
+        )),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
