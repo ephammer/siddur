@@ -7,12 +7,12 @@ import 'package:siddur/ui-elements/song_of_the_day_widget.dart';
 
 import 'CustomDrawer.dart';
 
-class MorningPragerPage extends StatefulWidget {
+class MorningPrayerPage extends StatefulWidget {
   @override
-  _MorningPragerPageState createState() => _MorningPragerPageState();
+  _MorningPrayerPageState createState() => _MorningPrayerPageState();
 }
 
-class _MorningPragerPageState extends State<MorningPragerPage> {
+class _MorningPrayerPageState extends State<MorningPrayerPage> {
   ItemScrollController itemScrollController;
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
@@ -32,9 +32,8 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
       ? true
       : false;
 
-  int _scrollIndex = 0;
 
-  final List<Widget> morningPrayers = [
+  List<Widget> morningPrayers = [
     // Morning Prayers
     Column(
       children: [
@@ -1576,7 +1575,7 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
             ],
           )
         : Container(),
-    // Ashrei
+//     Ashrei
     Column(
       children: [
         Padding(
@@ -1786,7 +1785,7 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
       dropDownMenuItems.insert(
           7,
           DropdownMenuItem(
-            value: 8,
+            value: 9,
             child: Text(
               "Torah Reading",
 //                  style: TextStyle(color: Theme.of(context).accentColor),
@@ -1814,47 +1813,64 @@ class _MorningPragerPageState extends State<MorningPragerPage> {
 //            alignment: 0,
 //            curve: Curves.linear);
   }
-  
+
+  setDropDownMenuItem(int index){
+    if (index == 6) {
+      if (IS_HALLEL) {
+        setState(() {
+          _value = index;
+        });
+      }
+      else
+        setDropDownMenuItem(++index);
+
+    }else if (index == 7) {
+      if (IS_TAANITH || IS_TEN_DAYS) {
+        setState(() {
+          _value = index;
+        });
+      }
+      else
+        setDropDownMenuItem(++index);
+    } else if (index == 8) {
+      if (IS_TACHANUN) {
+        setState(() {
+          _value = index;
+        });
+      }
+      else
+        setDropDownMenuItem(++index);
+    } else if (index == 9) {
+      if (IS_MONDAY_OR_TUESDAY) {
+        setState(() {
+          _value = index;
+        });
+      }
+      else
+        setDropDownMenuItem(++index);
+    }else {
+      setState(() {
+        _value = index;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
     itemPositionsListener.itemPositions.addListener(() {
-      if (itemPositionsListener.itemPositions.value.length > 0) {
-        int currentIndex =
-            itemPositionsListener.itemPositions.value.elementAt(0).index;
-        setState(() {
-          _scrollIndex = currentIndex;
-        });
-        if (currentIndex < dropDownMenuItems.length && currentIndex > -1) {
-          if (currentIndex == 7) {
-            if (IS_TAANITH || IS_TEN_DAYS) {
-              setState(() {
-                _value = currentIndex;
-              });
-            }
-          } else if (currentIndex == 8) {
-            if (IS_TACHANUN) {
-              setState(() {
-                _value = currentIndex;
-              });
-            }
-          } else if (currentIndex == 9) {
-            if (IS_MONDAY_OR_TUESDAY) {
-              setState(() {
-                _value = currentIndex;
-              });
-            }
-          } else if (currentIndex == 6) {
-            if (IS_HALLEL) {
-              setState(() {
-                _value = currentIndex;
-              });
-            }
-          }else {
-            setState(() {
-              _value = currentIndex;
-            });
-          }
+      if (itemPositionsListener.itemPositions.value.isNotEmpty) {
+        int currentIndex = itemPositionsListener.itemPositions.value
+            .where((ItemPosition position) => position.itemTrailingEdge > 0)
+            .reduce((ItemPosition min, ItemPosition position) =>
+        position.itemTrailingEdge < min.itemTrailingEdge
+            ? position
+            : min)
+            .index;
+//        int currentIndex =
+//            itemPositionsListener.itemPositions.value.elementAt(0).index;
+        if (currentIndex < 12 && currentIndex > -1) {
+          setDropDownMenuItem(currentIndex);
         }
       }
     });

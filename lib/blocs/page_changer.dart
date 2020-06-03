@@ -12,7 +12,7 @@ class PageChanger extends ChangeNotifier{
 
   List<Widget> listPages = [
     BedTimeShema(),
-    MorningPragerPage(),
+    MorningPrayerPage(),
     TravelPrayer(),
     MoonPrayerPage(),
     StudyPrayerPage(),
