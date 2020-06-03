@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:siddur/tools/hebrewcalendar/jewish_calendar.dart';
-import 'package:siddur/tools/hebrewcalendar/jewish_date.dart';
 import 'package:siddur/ui-elements/song_of_the_day_widget.dart';
 
 import 'CustomDrawer.dart';

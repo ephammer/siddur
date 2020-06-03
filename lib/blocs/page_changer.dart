@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:siddur/pages/AfternoonPrayerPage.dart';
 import 'package:siddur/pages/about_page.dart';
 import 'package:siddur/pages/bedtime_shema_page.dart';
 import 'package:siddur/pages/moon_prayer_page.dart';
@@ -18,6 +19,7 @@ class PageChanger extends ChangeNotifier{
     StudyPrayerPage(),
     ZmanimPage(),
     AboutPage(),
+    AfternoonPrayerPage(),
   ];
 
   int _chosenPageIndex = 0;

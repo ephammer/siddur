@@ -222,46 +222,61 @@ class MyDrawer extends StatelessWidget {
                         ),
                       )
                   :Container(),
-                  ListTile(
-                      onTap: () {
-                        _pageChanger.setPageIndex(0);
-                        CustomDrawer.of(context).close();
-                      },
-                      leading: Icon(SiddurIcons.sleep),
-                      title: Text("Bed Time Shema")),
-                  ListTile(
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        ListTile(
+                            onTap: () {
+                              _pageChanger.setPageIndex(0);
+                              CustomDrawer.of(context).close();
+                            },
+                            leading: Icon(SiddurIcons.sleep),
+                            title: Text("Bed Time Shema")),
+                        ListTile(
 
-                      onTap: () {
-                        _pageChanger.setPageIndex(1);
-                        CustomDrawer.of(context).close();
+                            onTap: () {
+                              _pageChanger.setPageIndex(1);
+                              CustomDrawer.of(context).close();
 
-                      },
-                      leading: Icon(SiddurIcons.sun),
-                      title: Text("Morning Prayer")),
-                  ListTile(
-                      onTap: () {
-                        _pageChanger.setPageIndex(2);
-                        CustomDrawer.of(context).close();
+                            },
+                            leading: Icon(SiddurIcons.sun),
+                            title: Text("Morning Prayer")),
+                        ListTile(
+                            onTap: () {
+                              _pageChanger.setPageIndex(_pageChanger.listPages.length-1);
+                              CustomDrawer.of(context).close();
 
-                      },
-                      leading: Icon(Icons.airplanemode_active),
-                      title: Text("Travel Prayer")),
-                  ListTile(
-                      onTap: () {
-                        _pageChanger.setPageIndex(3);
-                        CustomDrawer.of(context).close();
+                            },
+                            leading: Icon(Icons.wb_sunny),
+                            title: Text("Afternoon Prayer")),
+                        ListTile(
+                            onTap: () {
+                              _pageChanger.setPageIndex(2);
+                              CustomDrawer.of(context).close();
 
-                      },
-                      leading: Icon(SiddurIcons.moon_full),
-                      title: Text("Moon Prayer")),
-                  ListTile(
-                      onTap: () {
-                        _pageChanger.setPageIndex(4);
-                        CustomDrawer.of(context).close();
+                            },
+                            leading: Icon(Icons.airplanemode_active),
+                            title: Text("Travel Prayer")),
+                        ListTile(
+                            onTap: () {
+                              _pageChanger.setPageIndex(3);
+                              CustomDrawer.of(context).close();
 
-                      },
-                      leading: Icon(SiddurIcons.book_open),
-                      title: Text("Study Prayer")),
+                            },
+                            leading: Icon(SiddurIcons.moon_full),
+                            title: Text("Moon Prayer")),
+                        ListTile(
+                            onTap: () {
+                              _pageChanger.setPageIndex(4);
+                              CustomDrawer.of(context).close();
+
+                            },
+                            leading: Icon(SiddurIcons.book_open),
+                            title: Text("Study Prayer")),
+
+                      ],
+                    ),
+                  ),
 //                  ListTile(
 //                      onTap: () {
 //                        _pageChanger.setPageIndex(5);
@@ -270,7 +285,7 @@ class MyDrawer extends StatelessWidget {
 //                      },
 //                      leading: Icon(Icons.library_books),
 //                      title: Text("Zmanim")),
-                  Expanded(child: Container()),
+//                  Expanded(child: Container()),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: ListTile(

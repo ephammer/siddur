@@ -828,6 +828,15 @@ class JewishCalendar extends JewishDate {
     return true;
   }
 
+  bool isTachanunMinche(){
+    JewishCalendar nextDay = JewishCalendar.fromDateTime(this.getTime());
+    nextDay.forward();
+
+    if(this.isTachanun() && nextDay.isTachanun())
+      return true;
+    return false;
+  }
+
   bool isLamnatzeach(){
     if(
     this.isRoshChodesh()
