@@ -226,13 +226,6 @@ class MyDrawer extends StatelessWidget {
                     child: ListView(
                       children: [
                         ListTile(
-                            onTap: () {
-                              _pageChanger.setPageIndex(0);
-                              CustomDrawer.of(context).close();
-                            },
-                            leading: Icon(SiddurIcons.sleep),
-                            title: Text("Bed Time Shema")),
-                        ListTile(
 
                             onTap: () {
                               _pageChanger.setPageIndex(1);
@@ -259,12 +252,11 @@ class MyDrawer extends StatelessWidget {
                             title: Text("Night Prayer")),
                         ListTile(
                             onTap: () {
-                              _pageChanger.setPageIndex(2);
+                              _pageChanger.setPageIndex(0);
                               CustomDrawer.of(context).close();
-
                             },
-                            leading: Icon(Icons.airplanemode_active),
-                            title: Text("Travel Prayer")),
+                            leading: Icon(SiddurIcons.sleep),
+                            title: Text("Bed Time Shema")),
                         ListTile(
                             onTap: () {
                               _pageChanger.setPageIndex(3);
@@ -273,6 +265,14 @@ class MyDrawer extends StatelessWidget {
                             },
                             leading: Icon(SiddurIcons.moon_full),
                             title: Text("Moon Prayer")),
+                        ListTile(
+                            onTap: () {
+                              _pageChanger.setPageIndex(2);
+                              CustomDrawer.of(context).close();
+
+                            },
+                            leading: Icon(Icons.airplanemode_active),
+                            title: Text("Travel Prayer")),
                         ListTile(
                             onTap: () {
                               _pageChanger.setPageIndex(4);
