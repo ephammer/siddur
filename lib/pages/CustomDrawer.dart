@@ -243,12 +243,20 @@ class MyDrawer extends StatelessWidget {
                             title: Text("Morning Prayer")),
                         ListTile(
                             onTap: () {
-                              _pageChanger.setPageIndex(_pageChanger.listPages.length-1);
+                              _pageChanger.setPageIndex(7);
                               CustomDrawer.of(context).close();
 
                             },
                             leading: Icon(Icons.wb_sunny),
                             title: Text("Afternoon Prayer")),
+                        ListTile(
+                            onTap: () {
+                              _pageChanger.setPageIndex(8);
+                              CustomDrawer.of(context).close();
+
+                            },
+                            leading: Icon(Icons.brightness_3),
+                            title: Text("Night Prayer")),
                         ListTile(
                             onTap: () {
                               _pageChanger.setPageIndex(2);
