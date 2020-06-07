@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siddur/tools/hebrewcalendar/jewish_calendar.dart';
 import 'package:siddur/ui-elements/song_of_the_day_widget.dart';
 
@@ -14,7 +15,12 @@ class MorningPrayerPage extends StatefulWidget {
 class _MorningPrayerPageState extends State<MorningPrayerPage> {
   ItemScrollController itemScrollController;
   final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
+  ItemPositionsListener.create();
+
+  // Recreat scroll postion
+  int initalIndex=0;
+  double initialAlignement = 0;
+
 
   // TODO: Implement pinch to zoom
   double _scaleFactor = 1.0;
@@ -26,8 +32,12 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
   final IS_TEN_DAYS = JewishCalendar.fromDateTime(DateTime.now()).isTenDays();
   final IS_TACHANUN = JewishCalendar.fromDateTime(DateTime.now()).isTachanun();
   final IS_HALLEL = JewishCalendar.fromDateTime(DateTime.now()).isHallel();
-  final IS_MONDAY_OR_TUESDAY = (DateTime.now().weekday == DateTime.monday ||
-          DateTime.now().weekday == DateTime.thursday)
+  final IS_MONDAY_OR_TUESDAY = (DateTime
+      .now()
+      .weekday == DateTime.monday ||
+      DateTime
+          .now()
+          .weekday == DateTime.thursday)
       ? true
       : false;
 
@@ -224,15 +234,15 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
         ),
         (JewishCalendar.fromDateTime(DateTime.now()).isRoshChodesh())
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "בְרָאשֵׁי חָדְשֵׁיכֶם תַּקְרִיבוּ עלָה לה\', פָּרִים בְּנֵי בָקָר שְׁנַיִם וְאַיִל אֶחָד, כְּבָשים בְּנֵי שָׁנָה שִׁבְעָה תְּמִימִים: וּשְׁלשָׁה עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַפָּר הָאֶחָד, וּשְׁנֵי עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לָאַיִל הָאֶחָד: וְעִשּרן עִשּרון סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַכֶּבֶש הָאֶחָד, עלָה רֵיחַ נִיחחַ אִשֶּׁה לה\': וְנִסְכֵּיהֶם, חֲצִי הַהִין יִהְיֶה לַפָּר, וּשְׁלִישִׁת הַהִין לָאַיִל, וּרְבִיעִת הַהִין לַכֶּבֶש יָיִן, זאת עלַת חדֶשׁ בְּחָדְשׁו לְחָדְשֵׁי הַשָּׁנָה: וּשעִיר עִזִּים אֶחָד לְחַטָּאת לה\', עַל עלַת הַתָּמִיד יֵעָשה וְנִסְכּו:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(
-                      fontSize: 24, color: Colors.redAccent),
-                ),
-              )
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "בְרָאשֵׁי חָדְשֵׁיכֶם תַּקְרִיבוּ עלָה לה\', פָּרִים בְּנֵי בָקָר שְׁנַיִם וְאַיִל אֶחָד, כְּבָשים בְּנֵי שָׁנָה שִׁבְעָה תְּמִימִים: וּשְׁלשָׁה עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַפָּר הָאֶחָד, וּשְׁנֵי עֶשרנִים סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לָאַיִל הָאֶחָד: וְעִשּרן עִשּרון סלֶת מִנְחָה בְּלוּלָה בַשֶּׁמֶן לַכֶּבֶש הָאֶחָד, עלָה רֵיחַ נִיחחַ אִשֶּׁה לה\': וְנִסְכֵּיהֶם, חֲצִי הַהִין יִהְיֶה לַפָּר, וּשְׁלִישִׁת הַהִין לָאַיִל, וּרְבִיעִת הַהִין לַכֶּבֶש יָיִן, זאת עלַת חדֶשׁ בְּחָדְשׁו לְחָדְשֵׁי הַשָּׁנָה: וּשעִיר עִזִּים אֶחָד לְחַטָּאת לה\', עַל עלַת הַתָּמִיד יֵעָשה וְנִסְכּו:",
+            textAlign: TextAlign.justify,
+            textDirection: TextDirection.rtl,
+            style: GoogleFonts.suezOne(
+                fontSize: 24, color: Colors.redAccent),
+          ),
+        )
             : Container(),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -332,8 +342,8 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
                 child: ExpansionTile(
                   title: Center(
                       child: Text(
-                    "Kaddish",
-                  )),
+                        "Kaddish",
+                      )),
                   children: [
                     Text(
                       "יִתְגַּדֵּל וְיִתְקַדֵּשׁ שְׁמֵהּ רַבָּא.\nבְּעָלְמָא דִּי בְרָא כִּרְעוּתֵהּ וְיַמְלִיךְ מַלְכוּתֵהּ בְּחַיֵּיכון וּבְיומֵיכון וּבְחַיֵּי דְכָל בֵּית יִשרָאֵל, בַּעֲגָלָא וּבִזְמַן קָרִיב, וְאִמְרוּ אָמֵן.\nיְהֵא שְׁמֵהּ רַבָּא מְבָרַךְ לְעָלַם וּלְעָלְמֵי עָלְמַיָּא.\nיִתְבָּרַךְ וְיִשְׁתַּבַּח וְיִתְפָּאַר וְיִתְרומַם וְיִתְנַשׁא וְיִתְהַדַּר וְיִתְעַלֶּה שְׁמֵהּ דְּקֻדְשָׁא. בְּרִיךְ הוּא.\nלְעֵלָּא מִן כָּל בִּרְכָתָא וְשִׁירָתָא תֻּשְׁבְּחָתָא וְנֶחֱמָתָא דַּאֲמִירָן בְּעָלְמָא, וְאִמְרוּ אָמֵן.",
@@ -494,8 +504,8 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
                 child: ExpansionTile(
                   title: Center(
                       child: Text(
-                    "Kaddish",
-                  )),
+                        "Kaddish",
+                      )),
                   children: [
                     Text(
                       "יִתְגַּדֵּל וְיִתְקַדֵּשׁ שְׁמֵהּ רַבָּא.\nבְּעָלְמָא דִּי בְרָא כִּרְעוּתֵהּ וְיַמְלִיךְ מַלְכוּתֵהּ בְּחַיֵּיכון וּבְיומֵיכון וּבְחַיֵּי דְכָל בֵּית יִשרָאֵל, בַּעֲגָלָא וּבִזְמַן קָרִיב, וְאִמְרוּ אָמֵן.\nיְהֵא שְׁמֵהּ רַבָּא מְבָרַךְ לְעָלַם וּלְעָלְמֵי עָלְמַיָּא.\nיִתְבָּרַךְ וְיִשְׁתַּבַּח וְיִתְפָּאַר וְיִתְרומַם וְיִתְנַשׁא וְיִתְהַדַּר וְיִתְעַלֶּה שְׁמֵהּ דְּקֻדְשָׁא. בְּרִיךְ הוּא.\nלְעֵלָּא מִן כָּל בִּרְכָתָא וְשִׁירָתָא תֻּשְׁבְּחָתָא וְנֶחֱמָתָא דַּאֲמִירָן בְּעָלְמָא, וְאִמְרוּ אָמֵן.",
@@ -728,21 +738,21 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isWinter()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "מַשִּׁיב הָרוּחַ וּמורִיד הַגֶּשֶׁׁם,",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "מַשִּׁיב הָרוּחַ וּמורִיד הַגֶּשֶׁׁם,",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "מַשִּׁיב הָרוּחַ וּמורִיד הַטַּל,",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                )),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "מַשִּׁיב הָרוּחַ וּמורִיד הַטַּל,",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -767,8 +777,8 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
                 child: ExpansionTile(
                   title: Center(
                       child: Text(
-                    "Keddusha",
-                  )),
+                        "Keddusha",
+                      )),
                   children: [
                     Text(
                       "בחזרת הש”ץ:\nנְקַדֵּשׁ אֶת שִׁמְךָ בָּעולָם. כְּשֵׁם שֶׁמַּקְדִּישִׁים אותו בִּשְׁמֵי מָרום. כַּכָּתוּב עַל יַד נְבִיאֶךָ: וְקָרָא זֶה אֶל זֶה וְאָמַר:\nקו”ח: קָדושׁ. קָדושׁ. קָדושׁ ה' צְבָאות. מְלא כָל הָאָרֶץ כְּבודו:\nחזן: לְעֻמָתָם בָּרוּךְ יאמֵרוּ:\nקו”ח: בָּרוּךְ כְּבוד ה' מִמְּקומו:\nחזן: וּבְדִבְרֵי קָדְשְׁךָ כָּתוּב לֵאמר:",
@@ -778,38 +788,38 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
                     ),
                     JewishCalendar.fromDateTime(DateTime.now()).isTenDays()
                         ? Text(
-                            "לחזן: לְדור וָדור נַגִּיד גָּדְלֶךָ וּלְנֵצַח נְצָחִים קְדֻשָּׁתְךָ נַקְדִּישׁ. וְשִׁבְחֲךָ אֱלהֵינוּ מִפִּינוּ לא יָמוּשׁ לְעולָם וָעֶד. כִּי אֵל מֶלֶךְ גָּדול וְקָדושׁ אָתָּה: בָּרוּךְ אַתָּה ה' הַמֶּלֶךְ הַקָּדושׁ.",
-                            textAlign: TextAlign.justify,
-                            textDirection: TextDirection.rtl,
-                            style: GoogleFonts.suezOne(fontSize: 24),
-                          )
+                      "לחזן: לְדור וָדור נַגִּיד גָּדְלֶךָ וּלְנֵצַח נְצָחִים קְדֻשָּׁתְךָ נַקְדִּישׁ. וְשִׁבְחֲךָ אֱלהֵינוּ מִפִּינוּ לא יָמוּשׁ לְעולָם וָעֶד. כִּי אֵל מֶלֶךְ גָּדול וְקָדושׁ אָתָּה: בָּרוּךְ אַתָּה ה' הַמֶּלֶךְ הַקָּדושׁ.",
+                      textAlign: TextAlign.justify,
+                      textDirection: TextDirection.rtl,
+                      style: GoogleFonts.suezOne(fontSize: 24),
+                    )
                         : Text(
-                            "לחזן: לְדור וָדור נַגִּיד גָּדְלֶךָ וּלְנֵצַח נְצָחִים קְדֻשָּׁתְךָ נַקְדִּישׁ. וְשִׁבְחֲךָ אֱלהֵינוּ מִפִּינוּ לא יָמוּשׁ לְעולָם וָעֶד. כִּי אֵל מֶלֶךְ גָּדול וְקָדושׁ אָתָּה: בָּרוּךְ אַתָּה ה' הָאֵל הַקָּדושׁ.",
-                            textAlign: TextAlign.justify,
-                            textDirection: TextDirection.rtl,
-                            style: GoogleFonts.suezOne(fontSize: 24),
-                          )
+                      "לחזן: לְדור וָדור נַגִּיד גָּדְלֶךָ וּלְנֵצַח נְצָחִים קְדֻשָּׁתְךָ נַקְדִּישׁ. וְשִׁבְחֲךָ אֱלהֵינוּ מִפִּינוּ לא יָמוּשׁ לְעולָם וָעֶד. כִּי אֵל מֶלֶךְ גָּדול וְקָדושׁ אָתָּה: בָּרוּךְ אַתָּה ה' הָאֵל הַקָּדושׁ.",
+                      textAlign: TextAlign.justify,
+                      textDirection: TextDirection.rtl,
+                      style: GoogleFonts.suezOne(fontSize: 24),
+                    )
                   ],
                 ),
               ),
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isTenDays()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "אַתָּה קָדושׁ וְשִׁמְךָ קָדושׁ וּקְדושִׁים בְּכָל יום יְהַלְּלוּךָ סֶּלָה: בָּרוּךְ אַתָּה ה', הַמֶּלֶךְ הַקָּדושׁ",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אַתָּה קָדושׁ וְשִׁמְךָ קָדושׁ וּקְדושִׁים בְּכָל יום יְהַלְּלוּךָ סֶּלָה: בָּרוּךְ אַתָּה ה', הַמֶּלֶךְ הַקָּדושׁ",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "אַתָּה קָדושׁ וְשִׁמְךָ קָדושׁ וּקְדושִׁים בְּכָל יום יְהַלְּלוּךָ סֶּלָה: בָּרוּךְ אַתָּה ה', הָאֵל הַקָּדושׁ",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                )),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אַתָּה קָדושׁ וְשִׁמְךָ קָדושׁ וּקְדושִׁים בְּכָל יום יְהַלְּלוּךָ סֶּלָה: בָּרוּךְ אַתָּה ה', הָאֵל הַקָּדושׁ",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -852,21 +862,21 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isWinter()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "בָּרֵךְ עָלֵינוּ ה' אֱלהֵינוּ אֶת הַשָּׁנָה הַזּאת וְאֶת כָּל מִינֵי תְבוּאָתָהּ לְטובָה. וְתֵן טַל וּמָטָר לִבְרָכָה עַל פְּנֵי הָאֲדָמָה וְשבְּעֵנוּ מִטּוּבָהּ. וּבָרֵךְ שְׁנָתֵנוּ כַּשָּׁנִים הַטּובות. בָּרוּךְ אַתָּה ה', מְבָרֵךְ הַשָּׁנִים:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "בָּרֵךְ עָלֵינוּ ה' אֱלהֵינוּ אֶת הַשָּׁנָה הַזּאת וְאֶת כָּל מִינֵי תְבוּאָתָהּ לְטובָה. וְתֵן טַל וּמָטָר לִבְרָכָה עַל פְּנֵי הָאֲדָמָה וְשבְּעֵנוּ מִטּוּבָהּ. וּבָרֵךְ שְׁנָתֵנוּ כַּשָּׁנִים הַטּובות. בָּרוּךְ אַתָּה ה', מְבָרֵךְ הַשָּׁנִים:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "בָּרֵךְ עָלֵינוּ ה' אֱלהֵינוּ אֶת הַשָּׁנָה הַזּאת וְאֶת כָּל מִינֵי תְבוּאָתָהּ לְטובָה. וְתֵן בְּרָכָה עַל פְּנֵי הָאֲדָמָה וְשבְּעֵנוּ מִטּוּבָהּ. וּבָרֵךְ שְׁנָתֵנוּ כַּשָּׁנִים הַטּובות. בָּרוּךְ אַתָּה ה', מְבָרֵךְ הַשָּׁנִים:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                )),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "בָּרֵךְ עָלֵינוּ ה' אֱלהֵינוּ אֶת הַשָּׁנָה הַזּאת וְאֶת כָּל מִינֵי תְבוּאָתָהּ לְטובָה. וְתֵן בְּרָכָה עַל פְּנֵי הָאֲדָמָה וְשבְּעֵנוּ מִטּוּבָהּ. וּבָרֵךְ שְׁנָתֵנוּ כַּשָּׁנִים הַטּובות. בָּרוּךְ אַתָּה ה', מְבָרֵךְ הַשָּׁנִים:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -877,21 +887,21 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isTenDays()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "הָשִׁיבָה שׁופְטֵינוּ כְּבָרִאשׁונָה וְיועֲצֵינוּ כְּבַתְּחִלָּה. וְהָסֵר מִמֶּנּוּ יָגון וַאֲנָחָה. וּמְלךְ עָלֵינוּ אַתָּה ה' לְבַדְּךָ בְּחֶסֶד וּבְרַחֲמִים. וְצַדְּקֵנוּ בַּמִשְׁפָּט. בָּרוּךְ אַתָּה ה',הַמֶּלֶךְ הַמִשְׁפָּט:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "הָשִׁיבָה שׁופְטֵינוּ כְּבָרִאשׁונָה וְיועֲצֵינוּ כְּבַתְּחִלָּה. וְהָסֵר מִמֶּנּוּ יָגון וַאֲנָחָה. וּמְלךְ עָלֵינוּ אַתָּה ה' לְבַדְּךָ בְּחֶסֶד וּבְרַחֲמִים. וְצַדְּקֵנוּ בַּמִשְׁפָּט. בָּרוּךְ אַתָּה ה',הַמֶּלֶךְ הַמִשְׁפָּט:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "הָשִׁיבָה שׁופְטֵינוּ כְּבָרִאשׁונָה וְיועֲצֵינוּ כְּבַתְּחִלָּה. וְהָסֵר מִמֶּנּוּ יָגון וַאֲנָחָה. וּמְלךְ עָלֵינוּ אַתָּה ה' לְבַדְּךָ בְּחֶסֶד וּבְרַחֲמִים. וְצַדְּקֵנוּ בַּמִשְׁפָּט. בָּרוּךְ אַתָּה ה', מֶלֶךְ אוהֵב צְדָקָה וּמִשְׁפָּט:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                )),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "הָשִׁיבָה שׁופְטֵינוּ כְּבָרִאשׁונָה וְיועֲצֵינוּ כְּבַתְּחִלָּה. וְהָסֵר מִמֶּנּוּ יָגון וַאֲנָחָה. וּמְלךְ עָלֵינוּ אַתָּה ה' לְבַדְּךָ בְּחֶסֶד וּבְרַחֲמִים. וְצַדְּקֵנוּ בַּמִשְׁפָּט. בָּרוּךְ אַתָּה ה', מֶלֶךְ אוהֵב צְדָקָה וּמִשְׁפָּט:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -942,13 +952,13 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isRoshChodesh()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "אֱלהֵינוּ וֵאלהֵי אֲבותֵינוּ. יַעֲלֶה וְיָבוא וְיַגִּיעַ. וְיֵרָאֶה וְיֵרָצֶה וְיִשָּׁמַע. וְיִפָּקֵד וְיִזָּכֵר זִכְרונֵנוּ וּפִקְדונֵנוּ וְזִכְרון אֲבותֵינוּ. וְזִכְרון מָשִׁיחַ בֶּן דָּוִד עַבְדֶּךָ. וְזִכְרון יְרוּשָׁלַיִם עִיר קָדְשֶׁךָ. וְזִכְרון כָּל עַמְּךָ בֵּית יִשרָאֵל. לְפָנֶיךָ. לִפְלֵיטָה לְטובָה. לְחֵן וּלְחֶסֶד וּלְרַחֲמִים. לְחַיִּים וּלְשָׁלום בְּיום ראשׁ הַחדֶשׁ הַזֶּה. זָכְרֵנוּ ה' אֱלהֵינוּ בּו לְטובָה. וּפָקְדֵנוּ בו לִבְרָכָה. וְהושִׁיעֵנוּ בו לְחַיִּים. וּבִדְבַר יְשׁוּעָה וְרַחֲמִים חוּס וְחָנֵּנוּ וְרַחֵם עָלֵינוּ וְהושִׁיעֵנוּ. כִּי אֵלֶיךָ עֵינֵינוּ. כִּי אֵל מֶלֶךְ חַנּוּן וְרַחוּם אָתָּה:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אֱלהֵינוּ וֵאלהֵי אֲבותֵינוּ. יַעֲלֶה וְיָבוא וְיַגִּיעַ. וְיֵרָאֶה וְיֵרָצֶה וְיִשָּׁמַע. וְיִפָּקֵד וְיִזָּכֵר זִכְרונֵנוּ וּפִקְדונֵנוּ וְזִכְרון אֲבותֵינוּ. וְזִכְרון מָשִׁיחַ בֶּן דָּוִד עַבְדֶּךָ. וְזִכְרון יְרוּשָׁלַיִם עִיר קָדְשֶׁךָ. וְזִכְרון כָּל עַמְּךָ בֵּית יִשרָאֵל. לְפָנֶיךָ. לִפְלֵיטָה לְטובָה. לְחֵן וּלְחֶסֶד וּלְרַחֲמִים. לְחַיִּים וּלְשָׁלום בְּיום ראשׁ הַחדֶשׁ הַזֶּה. זָכְרֵנוּ ה' אֱלהֵינוּ בּו לְטובָה. וּפָקְדֵנוּ בו לִבְרָכָה. וְהושִׁיעֵנוּ בו לְחַיִּים. וּבִדְבַר יְשׁוּעָה וְרַחֲמִים חוּס וְחָנֵּנוּ וְרַחֵם עָלֵינוּ וְהושִׁיעֵנוּ. כִּי אֵלֶיךָ עֵינֵינוּ. כִּי אֵל מֶלֶךְ חַנּוּן וְרַחוּם אָתָּה:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Container(),
         // TODO: Add cholhamoed pessah and succoth
         Padding(
@@ -975,8 +985,8 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
                 child: ExpansionTile(
                   title: Center(
                       child: Text(
-                    "Modim D'Rabanan",
-                  )),
+                        "Modim D'Rabanan",
+                      )),
                   children: [
                     Text(
                       "מודִים אֲנַחְנוּ לָךְ. שָׁאַתָּה הוּא ה' אֱלהֵינוּ וֵאלהֵי אֲבותֵינוּ. אֱלהֵי כָל בָּשר. יוצְרֵנוּ יוצֵר בְּרֵאשִׁית. בְּרָכות וְהודָאות לְשִׁמְךָ הַגָּדול וְהַקָּדושׁ. עַל שֶׁהֶחֱיִיתָנוּ וְקִיַּמְתָּנוּ. כֵּן תְּחַיֵּנוּ וּתְקַיְּמֵנוּ. וְתֶאֱסוף גָּלֻיּותֵינוּ לְחַצְרות קָדְשֶׁךָ. לִשְׁמור חֻקֶּיךָ. וְלַעֲשות רְצונֶךָ. וּלְעָבְדְךָ בְּלֵבָב שָׁלֵם. עַל שֶׁאָֽנוּ מודִים לָךְ. בָּרוּךְ  אַתָּה ה' אֵל הַהודָאוֹת:",
@@ -990,23 +1000,23 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isChanukah()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "עַל הַנִּסִּים וְעַל הַפֻּרְקָן וְעַל הַגְּבוּרות וְעַל הַתְּשׁוּעות וְעַל הַמִּלְחָמות שֶׁעָשיתָ לַאֲבותֵינוּ בַּיָּמִים הָהֵם בִּזְּמַן הַזֶּה:\n בִּימֵי מַתִּתְיָהוּ בֶּן יוחָנָן כּהֵן גָּדול חַשְׁמונַאִי וּבָנָיו. כְּשֶׁעָמְדָה מַלְכוּת יָוָן הָרְשָׁעָה עַל עַמְּךָ יִשרָאֵל לְהַשְׁכִּיחָם תּורָתֶךָ וּלְהַעֲבִירָם מֵחֻקֵּי רְצונֶךָ: וְאַתָּה בְּרַחֲמֶיךָ הָרַבִּים עָמַדְתָּ לָהֶם בְּעֵת צָרָתָם. רַבְתָּ אֶת רִיבָם. דַנְתָּ אֶת דִּינָם. נָקַמְתָּ אֶת נִקְמָתָם. מָסַרְתָּ גִבּורִים בְּיַד חַלָּשִׁים. וְרַבִּים בְּיַד מְעַטִּים. וּטְמֵאִים בְּיַד טְהורִים. וּרְשָׁעִים בְּיַד צַדִּיקִים. וְזֵדִים בְּיַד עוסְקֵי תורָתֶךָ. וּלְךָ עָשיתָ שֵׁם גָּדול וְקָדושׁ בְּעולָמֶךָ. וּלְעַמְּךָ יִשרָאֵל עָשיתָ תְּשׁוּעָה גְדולָה וּפֻרְקָן כְּהַיּום הַזֶּה: וְאַחַר כֵּן בָּאוּ בָנֶיךָ לִדְבִיר בֵּיתֶךָ. וּפִנּוּ אֶת הֵיכָלֶךָ. וְטִהֲרוּ אֶת מִקְדָּשֶׁךָ. וְהִדְלִיקוּ נֵרות בְּחַצְרות קָדְשֶׁךָ. וְקָבְעוּ שְׁמונַת יְמֵי חֲנֻכָּה אֵלּוּ. לְהודות וּלְהַלֵּל לְשִׁמְךָ הַגָּדול:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "עַל הַנִּסִּים וְעַל הַפֻּרְקָן וְעַל הַגְּבוּרות וְעַל הַתְּשׁוּעות וְעַל הַמִּלְחָמות שֶׁעָשיתָ לַאֲבותֵינוּ בַּיָּמִים הָהֵם בִּזְּמַן הַזֶּה:\n בִּימֵי מַתִּתְיָהוּ בֶּן יוחָנָן כּהֵן גָּדול חַשְׁמונַאִי וּבָנָיו. כְּשֶׁעָמְדָה מַלְכוּת יָוָן הָרְשָׁעָה עַל עַמְּךָ יִשרָאֵל לְהַשְׁכִּיחָם תּורָתֶךָ וּלְהַעֲבִירָם מֵחֻקֵּי רְצונֶךָ: וְאַתָּה בְּרַחֲמֶיךָ הָרַבִּים עָמַדְתָּ לָהֶם בְּעֵת צָרָתָם. רַבְתָּ אֶת רִיבָם. דַנְתָּ אֶת דִּינָם. נָקַמְתָּ אֶת נִקְמָתָם. מָסַרְתָּ גִבּורִים בְּיַד חַלָּשִׁים. וְרַבִּים בְּיַד מְעַטִּים. וּטְמֵאִים בְּיַד טְהורִים. וּרְשָׁעִים בְּיַד צַדִּיקִים. וְזֵדִים בְּיַד עוסְקֵי תורָתֶךָ. וּלְךָ עָשיתָ שֵׁם גָּדול וְקָדושׁ בְּעולָמֶךָ. וּלְעַמְּךָ יִשרָאֵל עָשיתָ תְּשׁוּעָה גְדולָה וּפֻרְקָן כְּהַיּום הַזֶּה: וְאַחַר כֵּן בָּאוּ בָנֶיךָ לִדְבִיר בֵּיתֶךָ. וּפִנּוּ אֶת הֵיכָלֶךָ. וְטִהֲרוּ אֶת מִקְדָּשֶׁךָ. וְהִדְלִיקוּ נֵרות בְּחַצְרות קָדְשֶׁךָ. וְקָבְעוּ שְׁמונַת יְמֵי חֲנֻכָּה אֵלּוּ. לְהודות וּלְהַלֵּל לְשִׁמְךָ הַגָּדול:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Container(),
         JewishCalendar.fromDateTime(DateTime.now()).isPurim()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "עַל הַנִּסִּים וְעַל הַפֻּרְקָן וְעַל הַגְּבוּרות וְעַל הַתְּשׁוּעות וְעַל הַמִּלְחָמות שֶׁעָשיתָ לַאֲבותֵינוּ בַּיָּמִים הָהֵם בִּזְּמַן הַזֶּה:\nבִּימֵי מָרְדְּכַי וְאֶסְתֵּר בְּשׁוּשַׁן הַבִּירָה. כְּשֶׁעָמַד עֲלֵיהֶם הָמָן הָרָשָׁע. בִּקֵּשׁ לְהַשְׁמִיד לַהֲרוג וּלְאַבֵּד אֶת כָּל הַיְּהוּדִים מִנַּעַר וְעַד זָקֵן טַף וְנָשִׁים בְּיום אֶחָד. בִּשְׁלשָׁה עָשר לְחדֶשׁ שְׁנֵים עָשר. הוּא חדֶשׁ אֲדָר. וּשְׁלָלָם לָבוז: וְאַתָּה בְּרַחֲמֶיךָ הָרַבִּים. הֵפַרְתָּ אֶת עֲצָתו. וְקִלְקַלְתָּ אֶת מַחֲשַׁבְתּו. וַהֲשֵׁבותָ לּו גְּמוּלו בְּראשׁו. וְתָלוּ אותו וְאֶת בָּנָיו עַל הָעֵץ.",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "עַל הַנִּסִּים וְעַל הַפֻּרְקָן וְעַל הַגְּבוּרות וְעַל הַתְּשׁוּעות וְעַל הַמִּלְחָמות שֶׁעָשיתָ לַאֲבותֵינוּ בַּיָּמִים הָהֵם בִּזְּמַן הַזֶּה:\nבִּימֵי מָרְדְּכַי וְאֶסְתֵּר בְּשׁוּשַׁן הַבִּירָה. כְּשֶׁעָמַד עֲלֵיהֶם הָמָן הָרָשָׁע. בִּקֵּשׁ לְהַשְׁמִיד לַהֲרוג וּלְאַבֵּד אֶת כָּל הַיְּהוּדִים מִנַּעַר וְעַד זָקֵן טַף וְנָשִׁים בְּיום אֶחָד. בִּשְׁלשָׁה עָשר לְחדֶשׁ שְׁנֵים עָשר. הוּא חדֶשׁ אֲדָר. וּשְׁלָלָם לָבוז: וְאַתָּה בְּרַחֲמֶיךָ הָרַבִּים. הֵפַרְתָּ אֶת עֲצָתו. וְקִלְקַלְתָּ אֶת מַחֲשַׁבְתּו. וַהֲשֵׁבותָ לּו גְּמוּלו בְּראשׁו. וְתָלוּ אותו וְאֶת בָּנָיו עַל הָעֵץ.",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Container(),
         Padding(
             padding: const EdgeInsets.all(8.0),
@@ -1018,13 +1028,13 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isTenDays()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "וּכְתב לְחַיִּים טובִים כָּל בְּנֵי בְרִיתֶךָ:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "וּכְתב לְחַיִּים טובִים כָּל בְּנֵי בְרִיתֶךָ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Container(),
         Padding(
             padding: const EdgeInsets.all(8.0),
@@ -1044,13 +1054,13 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         JewishCalendar.fromDateTime(DateTime.now()).isTenDays()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "בְּסֵפֶר חַיִּים. בְּרָכָה וְשָׁלום. וּפַרְנָסָה טובָה. נִזָּכֵר וְנִכָּתֵב לְפָנֶיךָ. אֲנַחְנוּ וְכָל עַמְּךָ בֵּית יִשרָאֵל. לְחַיִּים טובִים וּלְשָׁלום:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "בְּסֵפֶר חַיִּים. בְּרָכָה וְשָׁלום. וּפַרְנָסָה טובָה. נִזָּכֵר וְנִכָּתֵב לְפָנֶיךָ. אֲנַחְנוּ וְכָל עַמְּךָ בֵּית יִשרָאֵל. לְחַיִּים טובִים וּלְשָׁלום:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Container(),
         Padding(
             padding: const EdgeInsets.all(8.0),
@@ -1081,121 +1091,121 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
     // Hallel
     (JewishCalendar.fromDateTime(DateTime.now()).isHallel())
         ? Column(
-            children: [
-              (JewishCalendar.fromDateTime(DateTime.now()).isFullHallel())
-                  ? Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        "בָּרוּךְ אַתָּה ה' אֱלהֵינוּ מֶלֶךְ הָעולָם. אֲשֶׁר קִדְּשָׁנוּ בְּמִצְותָיו וְצִוָּנוּ לִקְרא אֶת הַהַלֵּל:",
-                        textAlign: TextAlign.justify,
-                        textDirection: TextDirection.rtl,
-                        style: GoogleFonts.suezOne(fontSize: 24),
-                      ))
-                  : Container(),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "הַלְלוּיָהּ הַלְלוּ עַבְדֵי יְהֹוָה הַלְלוּ אֶת שֵׁם יְהֹוָה: יְהִי שֵׁם יְהֹוָה מְבֹרָךְ מֵעַתָּה וְעַד־עוֹלָם: מִמִּזְרַח־שֶֽׁמֶשׁ עַד־מְבוֹאוֹ מְהֻלָּל שֵׁם יְהֹוָה: רָם עַל־כָּל־גּוֹיִם יְהֹוָה עַל הַשָּׁמַֽיִם כְּבוֹדוֹ: מִי כַּיהֹוָה אֱלֹהֵֽינוּ הַמַּגְבִּיהִי לָשָֽׁבֶת: הַמַּשְׁפִּילִי לִרְאוֹת בַּשָּׁמַֽיִם וּבָאָֽרֶץ: מְקִימִי מֵעָפָר דָּל מֵאַשְׁפֹּת יָרִים אֶבְיוֹן: לְהוֹשִׁיבִי עִם־נְדִיבִים עִם נְדִיבֵי עַמּוֹ: מוֹשִׁיבִי עֲקֶֽרֶת הַבַּֽיִת אֵם־הַבָּנִים שְׂמֵחָה הַלְלוּיָהּ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "בְּצֵאת יִשְׂרָאֵל מִמִּצְרָֽיִם בֵּית יַעֲקֹב מֵעַם לֹעֵז: הָיְתָה יְהוּדָה לְקָדְשׁוֹ יִשְׂרָאֵל מַמְשְׁלוֹתָיו: הַיָּם רָאָה וַיָּנֹס הַיַּרְדֵּן יִסֹּב לְאָחוֹר: הֶהָרִים רָקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי־צֹאן: מַה־לְּךָ הַיָּם כִּי תָנוּס הַיַּרְדֵּן תִּסֹּב לְאָחוֹר: הֶהָרִים תִּרְקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי־צֹאן: מִלִּפְנֵי אָדוֹן חֽוּלִי אָֽרֶץ מִלִּפְנֵי אֱלֽוֹהַּ יַעֲקֹב: הַהֹפְכִי הַצּוּר אֲגַם־מָֽיִם חַלָּמִישׁ לְמַעְיְנוֹ־מָֽיִם:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
-              ?Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "לֹא לָֽנוּ יְהֹוָה לֹא לָֽנוּ כִּי לְשִׁמְךָ תֵּן כָּבוֹד עַל־חַסְדְּךָ עַל־אֲמִתֶּֽךָ: לָֽמָּה יֹאמְרוּ הַגּוֹיִם אַיֵּה־נָא אֱלֹהֵיהֶם: וֵאלֹהֵֽינוּ בַשָּׁמָֽיִם כֹּל אֲשֶׁר־חָפֵץ עָשָׂה: עֲצַבֵּיהֶם כֶּֽסֶף וְזָהָב מַעֲשֵׂה יְדֵי אָדָם: פֶּה־לָהֶם וְלֹא יְדַבֵּֽרוּ עֵינַֽיִם לָהֶם וְלֹא יִרְאוּ: אָזְנַֽיִם לָהֶם וְלֹא יִשְׁמָֽעוּ אַף לָהֶם וְלֹא יְרִיחוּן: יְדֵיהֶם וְלֹא יְמִישׁוּן רַגְלֵיהֶם וְלֹא יְהַלֵּֽכוּ לֹא־יֶהְגּוּ בִּגְרוֹנָם: כְּמוֹהֶם יִהְיוּ עֹשֵׂיהֶם כֹּל אֲשֶׁר־בֹּטֵֽחַ בָּהֶם: יִשְׂרָאֵל בְּטַח בַּיהֹוָה עֶזְרָם וּמָגִנָּם הוּא: בֵּית אַהֲרֹן בִּטְחוּ בַיהֹוָה עֶזְרָם וּמָגִנָּם הוּא: יִרְאֵי יְהֹוָה בִּטְחוּ בַיהֹוָה עֶזְרָם וּמָגִנָּם הוּא:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  ))
-                  :Container(),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "יְהֹוָה זְכָרָֽנוּ יְבָרֵךְ יְבָרֵךְ אֶת־בֵּית יִשְׂרָאֵל יְבָרֵךְ אֶת־בֵּית אַהֲרֹן: יְבָרֵךְ יִרְאֵי יְהֹוָה הַקְּטַנִּים עִם־הַגְּדֹלִים: יֹסֵף יְהֹוָה עֲלֵיכֶם עֲלֵיכֶם וְעַל־בְּנֵיכֶם: בְּרוּכִים אַתֶּם לַיהֹוָה עֹשֵׂה שָׁמַֽיִם וָאָֽרֶץ: הַשָּׁמַֽיִם שָׁמַֽיִם לַיהֹוָה וְהָאָֽרֶץ נָתַן לִבְנֵי־אָדָם: לֹא־הַמֵּתִים יְהַלְלוּ־יָהּ וְלֹא כָּל־יֹרְדֵי דוּמָה: וַאֲנַֽחְנוּ נְבָרֵךְ יָהּ מֵעַתָּה וְעַד־עוֹלָם הַלְלוּיָהּ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
-                  ?Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "אָהַֽבְתִּי כִּי־יִשְׁמַע יְהֹוָה אֶת־קוֹלִי תַּחֲנוּנָי: כִּי־הִטָּה אָזְנוֹ לִי וּבְיָמַי אֶקְרָא: אֲפָפֽוּנִי חֶבְלֵי־מָֽוֶת וּמְצָרֵי שְׁאוֹל מְצָאֽוּנִי צָרָה וְיָגוֹן אֶמְצָא: וּבְשֵׁם־יְהֹוָה אֶקְרָא אָנָּה יְהֹוָה מַלְּטָה נַפְשִׁי: חַנּוּן יְהֹוָה וְצַדִּיק וֵאלֹהֵֽינוּ מְרַחֵם: שֹׁמֵר פְּתָאיִם יְהֹוָה דַּלּוֹתִי וְלִי יְהוֹשִֽׁיעַ: שׁוּבִי נַפְשִׁי לִמְנוּחָֽיְכִי כִּי־יְהֹוָה גָּמַל עָלָֽיְכִי: כִּי חִלַּֽצְתָּ נַפְשִׁי מִמָּֽוֶת אֶת־עֵינִי מִן־דִּמְעָה אֶת־רַגְלִי מִדֶּֽחִי: אֶתְהַלֵּךְ לִפְנֵי יְהֹוָה בְּאַרְצוֹת הַחַיִּים: הֶאֱמַֽנְתִּי כִּי אֲדַבֵּר אֲנִי עָנִֽיתִי מְאֹד: אֲנִי אָמַֽרְתִּי בְחָפְזִי כָּל־הָאָדָם כֹּזֵב:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  ))
-                  :Container(),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "מָה־אָשִׁיב לַיהֹוָה כָּל־תַּגְמוּלֽוֹהִי עָלָי: כּוֹס־יְשׁוּעוֹת אֶשָּׂא וּבְשֵׁם יְהֹוָה אֶקְרָא: נְדָרַי לַיהֹוָה אֲשַׁלֵּם נֶגְדָה־נָּא לְכָל־עַמּוֹ: יָקָר בְּעֵינֵי יְהֹוָה הַמָּֽוְתָה לַחֲסִידָיו: אָנָּה יְהֹוָה כִּי־אֲנִי עַבְדֶּֽךָ אֲנִי־עַבְדְּךָ בֶּן־אֲמָתֶֽךָ פִּתַּֽחְתָּ לְמוֹסֵרָי: לְךָ־אֶזְבַּח זֶֽבַח תּוֹדָה וּבְשֵׁם יְהֹוָה אֶקְרָא: נְדָרַי לַיהֹוָה אֲשַׁלֵּם נֶגְדָה־נָּא לְכָל־עַמּוֹ: בְּחַצְרוֹת בֵּית יְהֹוָה בְּתוֹכֵֽכִי יְרוּשָׁלָֽםִ הַלְלוּיָהּ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "הַלְלוּ אֶת־יְהֹוָה כָּל־גּוֹיִם שַׁבְּחֽוּהוּ כָּל־הָאֻמִּים: כִּי גָּבַר עָלֵֽינוּ חַסְדּוֹ וֶאֱמֶת־יְהֹוָה לְעוֹלָם הַלְלוּיָהּ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמַר־נָא יִשְׂרָאֵל כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמְרוּ־נָא בֵית־אַהֲרֹן כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמְרוּ־נָא יִרְאֵי יְהֹוָה כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:",
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "מִן־הַמֵּצַר קָרָֽאתִי יָהּ עָנָֽנִי בַמֶּרְחָב יָהּ: יְהֹוָה לִי לֹא אִירָא מַה־יַּעֲשֶׂה לִי אָדָם: יְהֹוָה לִי בְּעֹזְרָי וַאֲנִי אֶרְאֶה בְשׂנְאָי: טוֹב לַחֲסוֹת בַּיהֹוָה מִבְּטֹֽחַ בָּאָדָם: טוֹב לַחֲסוֹת בַּיהֹוָה מִבְּטֹֽחַ בִּנְדִיבִים: כָּל־גּוֹיִם סְבָבֽוּנִי בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: סַבּֽוּנִי גַם־סְבָבֽוּנִי בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: סַבּֽוּנִי כִדְבֹרִים דֹּעֲכוּ כְּאֵשׁ קוֹצִים בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: דָּחֹה דְחִיתַֽנִי לִנְפֹּל וַיהֹוָה עֲזָרָֽנִי: עָזִּי וְזִמְרָת יָהּ וַיְהִי־לִי לִישׁוּעָה: קוֹל רִנָּה וִישׁוּעָה בְּאָהֳלֵי צַדִּיקִים יְמִין יְהֹוָה עֹֽשָׂה חָֽיִל: יְמִין יְהֹוָה רוֹמֵמָה יְמִין יְהֹוָה עֹֽשָׂה חָֽיִל: לֹא־אָמוּת כִּי־אֶחְיֶה וַאֲסַפֵּר מַעֲשֵׂי יָהּ: יַסֹּר יִסְּרַֽנִּי יָהּ וְלַמָּֽוֶת לֹא נְתָנָֽנִי: פִּתְחוּ־לִי שַֽׁעֲרֵי־צֶֽדֶק אָֽבֹא־בָם אוֹדֶה יָהּ: זֶה־הַשַּֽׁעַר לַיהֹוָה צַדִּיקִים יָבֹֽאוּ בוֹ: אוֹדְךָ כִּי עֲנִיתָֽנִי וַתְּהִי־לִי לִישׁוּעָה: אוֹדְךָ כִּי עֲנִיתָֽנִי וַתְּהִי־לִי לִישׁוּעָה: אֶֽבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה: אֶֽבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה: מֵאֵת יְהֹוָה הָֽיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵֽינוּ: מֵאֵת יְהֹוָה הָֽיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵֽינוּ: זֶה־הַיּוֹם עָשָׂה יְהֹוָה נָגִֽילָה וְנִשְׂמְחָה בוֹ: זֶה־הַיּוֹם עָשָׂה יְהֹוָה נָגִֽילָה וְנִשְׂמְחָה בוֹ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "אָֽנָּא יְהֹוָה הוֹשִֽׁיעָה נָּא:\nאָֽנָּא יְהֹוָה הוֹשִֽׁיעָה נָּא:\nאָֽנָּא יְהֹוָה הַצְלִיחָה נָא:\nאָֽנָּא יְהֹוָה הַצְלִיחָה נָא:",
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "בָּרוּךְ הַבָּא בְּשֵׁם יְהֹוָה בֵּרַכְנוּכֶם מִבֵּית יְהֹוָה: בָּרוּךְ הַבָּא בְּשֵׁם יְהֹוָה בֵּרַכְנוּכֶם מִבֵּית יְהֹוָה: אֵל יְהֹוָה וַיָּֽאֶר לָֽנוּ אִסְרוּ־חַג בַּעֲבֹתִים עַד־קַרְנוֹת הַמִּזְבֵּֽחַ: אֵל יְהֹוָה וַיָּֽאֶר לָֽנוּ אִסְרוּ־חַג בַּעֲבֹתִים עַד־קַרְנוֹת הַמִּזְבֵּֽחַ: אֵלִי אַתָּה וְאוֹדֶֽךָ אֱלֹהַי אֲרוֹמְמֶֽךָ: אֵלִי אַתָּה וְאוֹדֶֽךָ אֱלֹהַי אֲרוֹמְמֶֽךָ: הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ: הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
-                  ?Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "יְהַלְלֽוּךָ יְהֹוָה אֱלֹהֵֽינוּ כָּל־מַעֲשֶֽׂיךָ וַחֲסִידֶֽיךָ צַדִּיקִים עוֹשֵׂי רְצוֹנֶֽךָ וְכָל עַמְּךָ בֵּית יִשְׂרָאֵל בְּרִנָּה יוֹדוּ וִיבָרְכוּ וִישַׁבְּחוּ וִיפָאֲרוּ וִישׁוֹרְרוּ וִירוֹמְמוּ וְיַעֲרִֽיצוּ וְיַקְדִּֽישׁוּ וְיַמְלִֽיכוּ אֶת שִׁמְךָ מַלְכֵּֽנוּ תָּמִיד. כִּי לְךָ טוֹב לְהוֹדוֹת וּלְשִׁמְךָ נָאֶה לְזַמֵּר. כִּי מֵעוֹלָם וְעַד עוֹלָם אַתָּה אֵל. בָּרוּךְ אַתָּה יְהֹוָה מֶֽלֶךְ מְהֻלָּל בַּתִּשְׁבָּחוֹת:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  ))
-                  :Container(),
-            ],
-          )
+      children: [
+        (JewishCalendar.fromDateTime(DateTime.now()).isFullHallel())
+            ? Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "בָּרוּךְ אַתָּה ה' אֱלהֵינוּ מֶלֶךְ הָעולָם. אֲשֶׁר קִדְּשָׁנוּ בְּמִצְותָיו וְצִוָּנוּ לִקְרא אֶת הַהַלֵּל:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
+            : Container(),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "הַלְלוּיָהּ הַלְלוּ עַבְדֵי יְהֹוָה הַלְלוּ אֶת שֵׁם יְהֹוָה: יְהִי שֵׁם יְהֹוָה מְבֹרָךְ מֵעַתָּה וְעַד־עוֹלָם: מִמִּזְרַח־שֶֽׁמֶשׁ עַד־מְבוֹאוֹ מְהֻלָּל שֵׁם יְהֹוָה: רָם עַל־כָּל־גּוֹיִם יְהֹוָה עַל הַשָּׁמַֽיִם כְּבוֹדוֹ: מִי כַּיהֹוָה אֱלֹהֵֽינוּ הַמַּגְבִּיהִי לָשָֽׁבֶת: הַמַּשְׁפִּילִי לִרְאוֹת בַּשָּׁמַֽיִם וּבָאָֽרֶץ: מְקִימִי מֵעָפָר דָּל מֵאַשְׁפֹּת יָרִים אֶבְיוֹן: לְהוֹשִׁיבִי עִם־נְדִיבִים עִם נְדִיבֵי עַמּוֹ: מוֹשִׁיבִי עֲקֶֽרֶת הַבַּֽיִת אֵם־הַבָּנִים שְׂמֵחָה הַלְלוּיָהּ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "בְּצֵאת יִשְׂרָאֵל מִמִּצְרָֽיִם בֵּית יַעֲקֹב מֵעַם לֹעֵז: הָיְתָה יְהוּדָה לְקָדְשׁוֹ יִשְׂרָאֵל מַמְשְׁלוֹתָיו: הַיָּם רָאָה וַיָּנֹס הַיַּרְדֵּן יִסֹּב לְאָחוֹר: הֶהָרִים רָקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי־צֹאן: מַה־לְּךָ הַיָּם כִּי תָנוּס הַיַּרְדֵּן תִּסֹּב לְאָחוֹר: הֶהָרִים תִּרְקְדוּ כְאֵילִים גְּבָעוֹת כִּבְנֵי־צֹאן: מִלִּפְנֵי אָדוֹן חֽוּלִי אָֽרֶץ מִלִּפְנֵי אֱלֽוֹהַּ יַעֲקֹב: הַהֹפְכִי הַצּוּר אֲגַם־מָֽיִם חַלָּמִישׁ לְמַעְיְנוֹ־מָֽיִם:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
+            ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "לֹא לָֽנוּ יְהֹוָה לֹא לָֽנוּ כִּי לְשִׁמְךָ תֵּן כָּבוֹד עַל־חַסְדְּךָ עַל־אֲמִתֶּֽךָ: לָֽמָּה יֹאמְרוּ הַגּוֹיִם אַיֵּה־נָא אֱלֹהֵיהֶם: וֵאלֹהֵֽינוּ בַשָּׁמָֽיִם כֹּל אֲשֶׁר־חָפֵץ עָשָׂה: עֲצַבֵּיהֶם כֶּֽסֶף וְזָהָב מַעֲשֵׂה יְדֵי אָדָם: פֶּה־לָהֶם וְלֹא יְדַבֵּֽרוּ עֵינַֽיִם לָהֶם וְלֹא יִרְאוּ: אָזְנַֽיִם לָהֶם וְלֹא יִשְׁמָֽעוּ אַף לָהֶם וְלֹא יְרִיחוּן: יְדֵיהֶם וְלֹא יְמִישׁוּן רַגְלֵיהֶם וְלֹא יְהַלֵּֽכוּ לֹא־יֶהְגּוּ בִּגְרוֹנָם: כְּמוֹהֶם יִהְיוּ עֹשֵׂיהֶם כֹּל אֲשֶׁר־בֹּטֵֽחַ בָּהֶם: יִשְׂרָאֵל בְּטַח בַּיהֹוָה עֶזְרָם וּמָגִנָּם הוּא: בֵּית אַהֲרֹן בִּטְחוּ בַיהֹוָה עֶזְרָם וּמָגִנָּם הוּא: יִרְאֵי יְהֹוָה בִּטְחוּ בַיהֹוָה עֶזְרָם וּמָגִנָּם הוּא:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
+            : Container(),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "יְהֹוָה זְכָרָֽנוּ יְבָרֵךְ יְבָרֵךְ אֶת־בֵּית יִשְׂרָאֵל יְבָרֵךְ אֶת־בֵּית אַהֲרֹן: יְבָרֵךְ יִרְאֵי יְהֹוָה הַקְּטַנִּים עִם־הַגְּדֹלִים: יֹסֵף יְהֹוָה עֲלֵיכֶם עֲלֵיכֶם וְעַל־בְּנֵיכֶם: בְּרוּכִים אַתֶּם לַיהֹוָה עֹשֵׂה שָׁמַֽיִם וָאָֽרֶץ: הַשָּׁמַֽיִם שָׁמַֽיִם לַיהֹוָה וְהָאָֽרֶץ נָתַן לִבְנֵי־אָדָם: לֹא־הַמֵּתִים יְהַלְלוּ־יָהּ וְלֹא כָּל־יֹרְדֵי דוּמָה: וַאֲנַֽחְנוּ נְבָרֵךְ יָהּ מֵעַתָּה וְעַד־עוֹלָם הַלְלוּיָהּ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
+            ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אָהַֽבְתִּי כִּי־יִשְׁמַע יְהֹוָה אֶת־קוֹלִי תַּחֲנוּנָי: כִּי־הִטָּה אָזְנוֹ לִי וּבְיָמַי אֶקְרָא: אֲפָפֽוּנִי חֶבְלֵי־מָֽוֶת וּמְצָרֵי שְׁאוֹל מְצָאֽוּנִי צָרָה וְיָגוֹן אֶמְצָא: וּבְשֵׁם־יְהֹוָה אֶקְרָא אָנָּה יְהֹוָה מַלְּטָה נַפְשִׁי: חַנּוּן יְהֹוָה וְצַדִּיק וֵאלֹהֵֽינוּ מְרַחֵם: שֹׁמֵר פְּתָאיִם יְהֹוָה דַּלּוֹתִי וְלִי יְהוֹשִֽׁיעַ: שׁוּבִי נַפְשִׁי לִמְנוּחָֽיְכִי כִּי־יְהֹוָה גָּמַל עָלָֽיְכִי: כִּי חִלַּֽצְתָּ נַפְשִׁי מִמָּֽוֶת אֶת־עֵינִי מִן־דִּמְעָה אֶת־רַגְלִי מִדֶּֽחִי: אֶתְהַלֵּךְ לִפְנֵי יְהֹוָה בְּאַרְצוֹת הַחַיִּים: הֶאֱמַֽנְתִּי כִּי אֲדַבֵּר אֲנִי עָנִֽיתִי מְאֹד: אֲנִי אָמַֽרְתִּי בְחָפְזִי כָּל־הָאָדָם כֹּזֵב:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
+            : Container(),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "מָה־אָשִׁיב לַיהֹוָה כָּל־תַּגְמוּלֽוֹהִי עָלָי: כּוֹס־יְשׁוּעוֹת אֶשָּׂא וּבְשֵׁם יְהֹוָה אֶקְרָא: נְדָרַי לַיהֹוָה אֲשַׁלֵּם נֶגְדָה־נָּא לְכָל־עַמּוֹ: יָקָר בְּעֵינֵי יְהֹוָה הַמָּֽוְתָה לַחֲסִידָיו: אָנָּה יְהֹוָה כִּי־אֲנִי עַבְדֶּֽךָ אֲנִי־עַבְדְּךָ בֶּן־אֲמָתֶֽךָ פִּתַּֽחְתָּ לְמוֹסֵרָי: לְךָ־אֶזְבַּח זֶֽבַח תּוֹדָה וּבְשֵׁם יְהֹוָה אֶקְרָא: נְדָרַי לַיהֹוָה אֲשַׁלֵּם נֶגְדָה־נָּא לְכָל־עַמּוֹ: בְּחַצְרוֹת בֵּית יְהֹוָה בְּתוֹכֵֽכִי יְרוּשָׁלָֽםִ הַלְלוּיָהּ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "הַלְלוּ אֶת־יְהֹוָה כָּל־גּוֹיִם שַׁבְּחֽוּהוּ כָּל־הָאֻמִּים: כִּי גָּבַר עָלֵֽינוּ חַסְדּוֹ וֶאֱמֶת־יְהֹוָה לְעוֹלָם הַלְלוּיָהּ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמַר־נָא יִשְׂרָאֵל כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמְרוּ־נָא בֵית־אַהֲרֹן כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:\nיֹֽאמְרוּ־נָא יִרְאֵי יְהֹוָה כִּי לְעוֹלָם חַסְדּוֹ:\nהוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:",
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "מִן־הַמֵּצַר קָרָֽאתִי יָהּ עָנָֽנִי בַמֶּרְחָב יָהּ: יְהֹוָה לִי לֹא אִירָא מַה־יַּעֲשֶׂה לִי אָדָם: יְהֹוָה לִי בְּעֹזְרָי וַאֲנִי אֶרְאֶה בְשׂנְאָי: טוֹב לַחֲסוֹת בַּיהֹוָה מִבְּטֹֽחַ בָּאָדָם: טוֹב לַחֲסוֹת בַּיהֹוָה מִבְּטֹֽחַ בִּנְדִיבִים: כָּל־גּוֹיִם סְבָבֽוּנִי בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: סַבּֽוּנִי גַם־סְבָבֽוּנִי בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: סַבּֽוּנִי כִדְבֹרִים דֹּעֲכוּ כְּאֵשׁ קוֹצִים בְּשֵׁם יְהֹוָה כִּי אֲמִילַם: דָּחֹה דְחִיתַֽנִי לִנְפֹּל וַיהֹוָה עֲזָרָֽנִי: עָזִּי וְזִמְרָת יָהּ וַיְהִי־לִי לִישׁוּעָה: קוֹל רִנָּה וִישׁוּעָה בְּאָהֳלֵי צַדִּיקִים יְמִין יְהֹוָה עֹֽשָׂה חָֽיִל: יְמִין יְהֹוָה רוֹמֵמָה יְמִין יְהֹוָה עֹֽשָׂה חָֽיִל: לֹא־אָמוּת כִּי־אֶחְיֶה וַאֲסַפֵּר מַעֲשֵׂי יָהּ: יַסֹּר יִסְּרַֽנִּי יָהּ וְלַמָּֽוֶת לֹא נְתָנָֽנִי: פִּתְחוּ־לִי שַֽׁעֲרֵי־צֶֽדֶק אָֽבֹא־בָם אוֹדֶה יָהּ: זֶה־הַשַּֽׁעַר לַיהֹוָה צַדִּיקִים יָבֹֽאוּ בוֹ: אוֹדְךָ כִּי עֲנִיתָֽנִי וַתְּהִי־לִי לִישׁוּעָה: אוֹדְךָ כִּי עֲנִיתָֽנִי וַתְּהִי־לִי לִישׁוּעָה: אֶֽבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה: אֶֽבֶן מָאֲסוּ הַבּוֹנִים הָיְתָה לְרֹאשׁ פִּנָּה: מֵאֵת יְהֹוָה הָֽיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵֽינוּ: מֵאֵת יְהֹוָה הָֽיְתָה זֹּאת הִיא נִפְלָאת בְּעֵינֵֽינוּ: זֶה־הַיּוֹם עָשָׂה יְהֹוָה נָגִֽילָה וְנִשְׂמְחָה בוֹ: זֶה־הַיּוֹם עָשָׂה יְהֹוָה נָגִֽילָה וְנִשְׂמְחָה בוֹ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אָֽנָּא יְהֹוָה הוֹשִֽׁיעָה נָּא:\nאָֽנָּא יְהֹוָה הוֹשִֽׁיעָה נָּא:\nאָֽנָּא יְהֹוָה הַצְלִיחָה נָא:\nאָֽנָּא יְהֹוָה הַצְלִיחָה נָא:",
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "בָּרוּךְ הַבָּא בְּשֵׁם יְהֹוָה בֵּרַכְנוּכֶם מִבֵּית יְהֹוָה: בָּרוּךְ הַבָּא בְּשֵׁם יְהֹוָה בֵּרַכְנוּכֶם מִבֵּית יְהֹוָה: אֵל יְהֹוָה וַיָּֽאֶר לָֽנוּ אִסְרוּ־חַג בַּעֲבֹתִים עַד־קַרְנוֹת הַמִּזְבֵּֽחַ: אֵל יְהֹוָה וַיָּֽאֶר לָֽנוּ אִסְרוּ־חַג בַּעֲבֹתִים עַד־קַרְנוֹת הַמִּזְבֵּֽחַ: אֵלִי אַתָּה וְאוֹדֶֽךָ אֱלֹהַי אֲרוֹמְמֶֽךָ: אֵלִי אַתָּה וְאוֹדֶֽךָ אֱלֹהַי אֲרוֹמְמֶֽךָ: הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ: הוֹדוּ לַיהֹוָה כִּי־טוֹב כִּי לְעוֹלָם חַסְדּוֹ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        JewishCalendar.fromDateTime(DateTime.now()).isFullHallel()
+            ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "יְהַלְלֽוּךָ יְהֹוָה אֱלֹהֵֽינוּ כָּל־מַעֲשֶֽׂיךָ וַחֲסִידֶֽיךָ צַדִּיקִים עוֹשֵׂי רְצוֹנֶֽךָ וְכָל עַמְּךָ בֵּית יִשְׂרָאֵל בְּרִנָּה יוֹדוּ וִיבָרְכוּ וִישַׁבְּחוּ וִיפָאֲרוּ וִישׁוֹרְרוּ וִירוֹמְמוּ וְיַעֲרִֽיצוּ וְיַקְדִּֽישׁוּ וְיַמְלִֽיכוּ אֶת שִׁמְךָ מַלְכֵּֽנוּ תָּמִיד. כִּי לְךָ טוֹב לְהוֹדוֹת וּלְשִׁמְךָ נָאֶה לְזַמֵּר. כִּי מֵעוֹלָם וְעַד עוֹלָם אַתָּה אֵל. בָּרוּךְ אַתָּה יְהֹוָה מֶֽלֶךְ מְהֻלָּל בַּתִּשְׁבָּחוֹת:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
+            : Container(),
+      ],
+    )
         : Container(),
     // Avinu Malkeinu
     Column(
@@ -1203,9 +1213,9 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
         Padding(padding: const EdgeInsets.all(16.0), child: Container()),
         JewishCalendar.fromDateTime(DateTime.now()).isTenDays()
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "אָבִינוּ מַלְכֵּנוּ. חָטָאנוּ לְפָנֶיךָ:\n"
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אָבִינוּ מַלְכֵּנוּ. חָטָאנוּ לְפָנֶיךָ:\n"
                   "אָבִינוּ מַלְכֵּנוּ. אֵין לָנוּ מֶלֶךְ אֶלָּא אָתָּה:\n"
                   "אָבִינוּ מַלְכֵּנוּ. עֲשה עִמָּנוּ לְמַעַן שְׁמֶךָ:"
                   "\nאָבִינוּ מַלְכֵּנוּ. חַדֵּשׁ עָלֵינוּ שָׁנָה טובָה:"
@@ -1249,330 +1259,342 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
                   "\nאָבִינוּ מַלְכֵּנוּ. עֲשה לְמַעַן רַחֲמֶיךָ הָרַבִּים:"
                   "\nאָבִינוּ מַלְכֵּנוּ. עֲשה לְמַעַן שִׁמְךָ הַגָּדול הַגִּבּור וְהַנּורָא שֶׁנִּקְרָא עָלֵינוּ:"
                   "\nאָבִינוּ מַלְכֵּנוּ. חָנֵּנוּ וַעֲנֵנוּ כִּי אֵין בָּנוּ מַעֲשים עֲשה עִמָּנוּ צְדָקָה וָחֶסֶד וְהושִׁיעֵנוּ:",
-                  textAlign: TextAlign.right,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+              textAlign: TextAlign.right,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Container(),
       ],
     ),
     // Tachanunim
     (JewishCalendar.fromDateTime(DateTime.now()).isTachanun())
         ? Column(
-            children: [
-              (DateTime.now().weekday == DateTime.monday ||
-                      DateTime.now().weekday == DateTime.thursday)
-                  ? Column(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Container()),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "וְהוּא רַחוּם יְכַפֵּר עָון וְלא יַשְׁחִית. וְהִרְבָּה לְהָשִׁיב אַפּו וְלא יָעִיר כָּל חֲמָתו: אַתָּה ה'. לא תִכְלָא רַחֲמֶיךָ מִמֶּנּוּ. חַסְדְּךָ וַאֲמִתְּךָ תָּמִיד יִצְּרוּנוּ: הושִׁיעֵנוּ ה' אֱלהֵינוּ וְקַבְּצֵנוּ מִן הַגּויִם. לְהודות לְשֵׁם קָדְשֶׁךָ. לְהִשְׁתַּבֵּחַ בִּתְהִלָּתֶךָ: אִם עֲונות תִּשְׁמָר יָהּ. אֲדנָי מִי יַעֲמד: כִּי עִמְּךָ הַסְּלִיחָה לְמַעַן תִּוָּרֵא: לא כַחֲטָאֵינוּ תַּעֲשה לָנוּ וְלא כַעֲונותֵינוּ תִּגְמל עָלֵינוּ: אִם עֲונֵינוּ עָנוּ בָנוּ. ה'. עֲשה לְמַעַן שְׁמֶךָ: זְכר רַחֲמֶיךָ ה' וַחֲסָדֶיךָ. כִּי מֵעולָם הֵמָּה: יַעֲנֵנוּ ה' בְּיום צָרָה. יְשגְּבֵנוּ שֵׁם אֱלהֵי יַעֲקב: ה' הושִׁיעָה. הַמֶּלֶךְ יַעֲנֵנוּ בְיום קָרְאֵנוּ: אָבִינוּ מַלְכֵּנוּ חָנֵּנוּ וַעֲנֵנוּ. כִּי אֵין בָּנוּ מַעֲשים. צְדָקָה עֲשה עִמָּנוּ לְמַעַן שְׁמֶךָ: אֲדונֵינוּ אֱלהֵינוּ. שְׁמַע קול תַּחֲנוּנֵינוּ. וּזְכָר לָנוּ אֶת בְּרִית אֲבותֵינוּ וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ: וְעַתָּה אֲדנָי אֱלהֵינוּ. אֲשֶׁר הוצֵאתָ אֶת עַמְּךָ מֵאֶרֶץ מִצְרַיִם בְּיָד חֲזָקָה וַתַּעַש לְךָ שֵׁם כַּיּום הַזֶּה. חָטָאנוּ רָשָׁעְנוּ: אֲדנָי. כְּכָל צִדְקותֶיךָ יָשָׁב נָא אַפְּךָ וַחֲמָתְךָ מֵעִירְךָ יְרוּשָׁלַיִם הַר קָדְשֶׁךָ. כִּי בַחֲטָאֵינוּ וּבַעֲונות אֲבתֵינוּ. יְרוּשָׁלַיִם וְעַמְּךָ לְחֶרְפָּה לְכָל סְבִיבתֵינוּ: וְעַתָּה שְׁמַע אֱלהֵינוּ אֶל תְּפִלַּת עַבְדְּךָ וְאֶל תַּחֲנוּנָיו. וְהָאֵר פָּנֶיךָ עַל מִקְדָּשְׁךָ הַשָּׁמֵם. לְמַעַן אֲדנָי:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "הַטֵּה אֱלהַי אָזְנְךָ וּשְׁמָע. פְּקַח עֵינֶיךָ וּרְאֵה שׁומְמותֵינוּ וְהָעִיר אֲשֶׁר נִקְרָא שִׁמְךָ עָלֶיהָ. כִּי לא עַל צִדְקותֵינוּ אֲנַחְנוּ מַפִּילִים תַּחֲנוּנֵינוּ לְפָנֶיךָ. כִּי עַל רַחֲמֶיךָ הָרַבִּים: אֲדנָי שְׁמָעָה. אֲדנָי סְלָחָה. אֲדנָי הַקְשִׁיבָה. וַעֲשה אַל תְּאַחַר. לְמַעַנְךָ אֱלהַי. כִּי שִׁמְךָ נִקְרָא עַל עִירְךָ וְעַל עַמֶּךָ: אָבִינוּ הָאָב הָרַחֲמָן. הַרְאֵנוּ אות לְטובָה וְקַבֵּץ נְפוּצותֵינוּ מֵאַרְבַּע כַּנְפות הָאָרֶץ. יַכִּירוּ וְיֵדְעוּ כָּל הַגּויִם. כִּי אַתָּה ה' אֱלהֵינוּ: וְעַתָּה ה' אָבִינוּ אָתָּה. אֲנַחְנוּ הַחמֶר וְאַתָּה יצְרֵנוּ וּמַעֲשה יָדְךָ כֻּלָּנוּ: הושִׁיעֵנוּ לְמַעַן שְׁמֶךָ. צוּרֵנוּ מַלְכֵּנוּ וְגואֲלֵנוּ: חוּסָה ה' עַל עַמֶּךָ וְאַל תִּתֵּן נַחֲלָתְךָ לְחֶרְפָּה לִמְשָׁל בָּם גּויִם. לָמָּה יאמְרוּ בָעַמִּים אַיֵּה אֱלהֵיהֶם: יָדַעְנוּ כִּי חָטָאנוּ וְאֵין מִי יַעֲמד בַּעֲדֵנוּ. שִׁמְךָ הַגָּדול יַעֲמָד לָנוּ בְּעֵת צָרָה. יָדַעְנוּ כִּי אֵין בָּנוּ מַעֲשים. צְדָקָה עֲשה עִמָּנוּ לְמַעַן שְׁמֶךָ: כְּרַחֵם אָב עַל בָּנִים כֵּן תְּרַחֵם ה' עָלֵינוּ. וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ: חֲמול עַל עַמֶּךָ. רַחֵם עַל נַחֲלָתֶךָ. חוּסָה נָּא כְּרוב רַחֲמֶיךָ. חָנֵּנוּ מַלְכֵּנוּ וַעֲנֵנוּ. כִּי לְךָ ה' הַצְּדָקָה. עשה נִפְלָאות בְּכָל עֵת:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "הַבֶּט נָא רַחֶם נָא עַל עַמְךָ מְהֵרָה לְמַעַן שְׁמֶךָ. בְּרַחֲמֶיךָ הָרַבִּים ה' אֱלהֵינוּ חוּס וְרַחֵם וְהושִׁיעָה צאן מַרְעִיתֶךָ. וְאַל יִמְשָׁל בָּנוּ קֶצֶף. כִּי לְךָ עֵינֵינוּ תְלוּיות. הושִׁיעֵנוּ לְמַעַן שְׁמֶּךָ.רַחֵם עָלֵינוּ לְמַעַן בְּרִיתֶךָ הַבִּיטָה וַעֲנֵנוּ בְּעֵת צָרָה. כִּי לְךָ ה' הַיְשׁוּעָה. בְּךָ תוחַלְתֵּנוּ אֱלוהַּ סְלִיחות. אָנָּא סְלַח נָא. אֵל טוב וְסַלָּח כִּי אֵל מֶלֶךְ חַנוּן וְרַחוּם אָתָּה:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "אָנָּא מֶלֶךְ חַנּוּן וְרַחוּם. זְכר וְהַבֵּט לִבְרִית בֵּין הַבְּתָרִים וְתֵרָאֶה לְפָנֶיךָ עֲקֵדַת יָחִיד לְמַעַן יִשרָאֵל. אָבִינוּ מַלְכֵּנוּ חָנֵּנוּ וַעֲנֵנוּ. כִּי שִׁמְךָ הַגָּדול נִקְרָא עָלֵינוּ. עשה נִפְלָאות בְּכָל עֵת. עֲשה עִמָּנוּ כְּחַסְדֶּךָ. חַנּוּן וְרַחוּם. הַבִּיטָה וַעֲנֵנוּ בְּעֵת צָרָה. כִּי לְךָ ה' הַיְשׁוּעָה. אָבִינוּ מַלְכֵּנוּ מַחֲסֵנוּ אַל תַּעַשׁ עִמָּנוּ כְּרעַ מַעֲלָלֵנוּ זְכור רַחֲמֶיךָ ה' וַחֲסָדֶיךָ וּכְרב טוּבְךָ הושִׁיעֵנוּ וַחֲמָל נָא עָלֵינוּ כִּי אֵין לָנוּ אֱלוהַּ אַחֵר מִבַּלְעָדֶיךָ צוּרֵנוּ אַל תַּעַזְבֵנוּ ה' אֱלהֵינוּ אַל תִּרְחַק מִמֶּנוּ כִּי נַפְשֵׁנוּ קְצָרָה. מֵחֶרֵב וּמִשְּׁבִי וּמִדֶּבֶר וּמִמַּגֵּפָה וּמִכָּל צָרָה וְיָגון הַצִּילֵנוּ כִּי לְךָ קִוִּינוּ וְאַל תַּכְלִימֵנוּ ה' אֱלהֵינוּ וְהָאֵר פָּנֶיךָ בָּנוּ וּזְכר לָנוּ אֶת בְּרִית אֲבותֵינוּ וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ. רְאֵה בְצָרותֵינוּ וּשְׁמַע קול תְּפִלָּתֵנוּ. כִּי אַתָּה שׁומֵע תְּפִלַּת כָּל פֶּה:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "אֵל רַחוּם וְחַנּוּן, רַחֵם עָלֵינוּ וְעַל כָּל מַעֲשיךָ, כִּי אֵין כָּמוךָ ה' אֱלהֵינוּ, אָנָּא שא נָא פְשָׁעֵינוּ. אָבִינוּ מַלְכֵּנוּ צוּרֵנוּ וְגואֲלֵנוּ, אֵל חַי וְקַיָּם הֶחָסִין בַּכּחַ, חָסִיד וְטוב עַל כָּל מַעֲשיךָ, כִּי אַתָּה הוּא ה' אֱלהֵינוּ. אֵל אֶרֶךְ אַפַּיִם וּמָלֵא רַחֲמִים, עֲשה עִמָּנוּ כְּרב רַחֲמֶיךָ, וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ. שְׁמַע מַלְכֵּנוּ תְּפִלָּתֵנוּ, וּמִיַּד אויְבֵינוּ הַצִּילֵנוּ. שְׁמַע מַלְכֵּנוּ תְּפִלָתֵנוּ וּמִכָּל צָרָה וְיָגון הַצִּילֵנוּ. אָבִינוּ מַלְכֵּנוּ אַתָּה, וְשִׁמְךָ עָלֵינוּ נִקְרָא, אַל תַּנִּיחֵנוּ. אַל תַּעַזְבֵנ אָבִינוּ, וְאַל תִּטְשֵׁנוּ בּורְאֵנוּ, וְאַל תִּשְׁכָּחֵנוּ יוצְרֵנוּ, כִּי אֵל מֶלֶךְ חַנּוּן וְרַחוּם אָתָּה:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "אֵין כָּמוךָ חַנּוּן וְרַחוּם ה' אֱלהֵינוּ. אֵין כָּמוךָ אֵל אֶרֶךְ אַפַּיִם וְרַב חֶסֶד וֶאֱמֶת. הושִׁיעֵנוּ בְּרַחֲמֶיךָ הָרַבִּים. מֵרַעַשׁ וּמֵרגֶז הַצִּילֵנוּ: זְכור לַעֲבָדֶיךָ לְאַבְרָהָם לְיִצְחָק וּלְיַעֲקב. אַל תֵּפֶן אֶל קָשְׁיֵנוּ וְאֶל רִשְׁעֵנוּ וְאֶל חַטָּאתֵנוּ שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ: וְהָסֵר מִמֶּנּוּ מַכַּת הַמָּוֶת כִּי רַחוּם אָתָּה. כִּי כֵן דַּרְכֶּךָ. עושה חֶסֶד חִנָּם בְּכָל דּור וָדור. חוּסָה ה' עַל עַמֶּךָ וְהַצִּילֵנוּ מִזַּעְמֶךָ. וְהָסֵר מִמֶּנּוּ מַכַּת הַמַּגֵּפָה וּגְזֵרָה קָשָׁה. כִּי אַתָּה שׁומֵר יִשרָאֵל: לְךָ אֲדנָי הַצְּדָקָה וְלָנוּ בּשֶׁת הַפָּנִים. מַה נִּתְאונֵן מַה נּאמַר מַה נְּדַבֵּר וּמַה נִּצְטַדָּק: נַחְפְּשה דְרָכֵינוּ וְנַחְקרָה וְנָשׁוּבָה אֵלֶיךָ. כִּי יְמִינְךָ פְשׁוּטָה לְקַבֵּל שָׁבִים: אָנָּא ה' הושִׁיעָה נָּא. אָנָּא ה' הַצְּלִיחָה נָא: אָנָּא ה' עֲנֵנוּ בְיום קָרְאֵנוּ: לְךָ ה' חִכִּינוּ. לְךָ ה' קִוִּינוּ. לְךָ ה' נְיַחֵל. אַל תֶּחֱשֶׁה וּתְעַנֵּנוּ. כִּי נָאֲמוּ גּויִם. אָבְדָה תִקְוָתָם. כָּל בֶּרֶךְ וְכָל קומָה לְךָ לְבַד תִּשְׁתַּחֲוֶה:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "הַפּותֵחַ יָד בִּתְשׁוּבָה לְקַבֵּל פּושְׁעִים וְחַטָּאִים. נִבְהֲלָה נַפְשֵׁנוּ מֵרב עִצְּבונֵנוּ. אַל תִּשְׁכָּחֵנוּ נֶצַח. קוּמָה וְהושִׁיעֵנוּ. כִּי חָסִינוּ בָךְ. אָבִינוּ מַלְכֵּנוּ. אִם אֵין בָּנוּ צְדָקָה וּמַעֲשים טובִים. זְכָר לָנוּ אֶת בְּרִית אֲבותֵינוּ. וְעֵדותֵינוּ בְּכָל יום ה' אֶחָד. הַבִּיטָה בְעָנְיֵנוּ. כִּי רַבּוּ מַכְאובֵינוּ. וְצָרות לְבָבֵנוּ. חוּסָה ה' עָלֵינוּ. וְאַל תִּשְׁפּךְ חֲרונְךָ עָלֵינוּ. כִּי אֲנַחְנוּ עַמְּךָ בְּנֵי בְרִיתֶךָ. אֵל הַבִּיטָה. דַּל כְּבודֵנוּ בַּגּויִים וְשִׁקְּצוּנוּ כְּטֻמְאַת הַנִּדָּה. עַד מָתַי עֻזְּךָ בַּשְּׁבִי. וְתִפְאַרְתְּךָ בְּיַד צָר. עורְרָה גְבוּרָתְךָ וְקִנְאָתְךָ עַל אויְבֶיךָ. הֵם יֵבושׁוּ וְיֵחַתּוּ מִגְבוּרָתָם. וְאַל יִמְעֲטוּ לְפָנֶיךָ תְּלָאותֵינוּ. מַהֵר יְקַדְּמוּנוּ רַחֲמֶיךָ בְּיום צָרָתֵנוּ. וְאִם לא לְמַעֲנֵנוּ לְמַעַנְךָ פְּעַל. וְאַל תַּשְׁחִית זֵכֶר שְׁאֵרִיתֵנוּ וְחון אם הַמְיַחֲדִים שִׁמְךָ פַּעֲמַיִם בְּכָל יום תָּמִיד בְּאַהֲבָה וְאומְרִים שְׁמַע יִשרָאֵל. ה' אֱלהֵינוּ. ה' אֶחָד:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                      ],
-                    )
-                  : Container(),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "רַחוּם וְחַנּוּן חָטָאתִי לְפָנֶיךָ. ה' מָלֵא רַחֲמִים. רַחֵם עָלַי וְקַבֵּל תַּחֲנוּנָי: ה' אַל בְּאַפְּךָ תוכִיחֵנִי. וְאַל בַּחֲמָתְךָ תְיַסְּרֵנִי: חָנֵּנִי ה'. כִּי אֻמְלַל אָנִי. רְפָאֵנִי ה'. כִּי נִבְהֲלוּ עֲצָמָי: וְנַפְשִׁי נִבְהֲלָה מְאד. וְאַתָּה ה' עַד מָתָי: שׁוּבָה ה'. חַלְּצָה נַפְשִׁי. הושִׁיעֵנִי לְמַעַן חַסְדֶּךָ: כִּי אֵין בַּמָּוֶת זִכְרֶךָ. בִּשְׁאול מִי יודֶה לָּךְ: יָגַעְתִּי בְאַנְחָתִי. אַשחֶה בְכָל לַיְלָה מִטָּתִי. בְּדִמְעָתִי עַרְשי אַמְסֶה: עָשְׁשָׁה מִכַּעַס עֵינִי. עָתְקָה בְּכָל צורְרָי: סוּרוּ מִמֶּנִּי כָּל פּעֲלֵי אָוֶן. כִּי שָׁמַע ה' קול בִּכְיִי: שָׁמַע ה' תְּחִנָּתִי. ה' תְּפִלָּתִי יִקָּח: יֵבשׁוּ וְיִבָּהֲלוּ מְאד כָּל איְבָי. יָשֻׁבוּ יֵבשׁוּ רָגַע:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              (DateTime.now().weekday == DateTime.monday ||
-                      DateTime.now().weekday == DateTime.thursday)
-                  ? Column(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ: הַבֵּט מִשָּׁמַיִם וּרְאֵה כִּי הָיִינוּ לַעַג וָקֶלֶס בַּגּויִם. נֶחְשַׁבְנוּ כַּצּאן לַטֶּבַח יוּבָל. לַהֲרוג וּלְאַבֵּד וּלְמַכָּה וּלְחֶרְפָּה: וּבְכָל זאת שִׁמְךָ לא שָׁכָחְנוּ. נָא אַל תִּשְׁכָּחֵנוּ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "זָרִים אומְרִים אֵין תּוחֶלֶת וְתִקְוָה. חון אום לְשִׁמְךָ מְקַוֶּה. טָהור. יְשׁוּעָתֵנוּ קָרְבָה. יָגַעְנוּ וְלא הוּנַח לָנוּ. רַחֲמֶיךָ יִכְבְּשׁוּ אֶת כַּעַסְךָ מֵעָלֵינוּ: אָנָּא שׁוּב מֵחֲרונְךָ וְרַחֵם סְגֻלָּה אֲשֶׁר בָּחָרְתָּ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "חוּסָה ה' עָלֵינוּ בְּרַחֲמֶיךָ וְאַל תִּתְּנֵנוּ בִּידֵי אַכְזָרִים. לָמָּה יאמְרוּ הַגּויִם אַיֵּה נָא אֱלהֵיהֶם. לְמַעַנְךָ עֲשה עִמָּנוּ חֶסֶד וְאַל תְּאַחַר: אָנָּא שׁוּב מֵחֲרונְךָ וְרַחֵם סְגֻלָּה אֲשֶׁר בָּחָרְתָּ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "קולֵנוּ תִשְׁמַע וְתָחון. וְאַל תִּטְּשֵׁנוּ בְּיַד איְבֵינוּ לִמְחות אֶת שְׁמֵנוּ. זְכר אֲשֶׁר נִשְׁבַּעְתָּ לַאֲבותֵינוּ כְּכוכְבֵי הַשָּׁמַיִם אַרְבֶּה אֶת זַרְעֲכֶם. וְעַתָּה נִשְׁאַרְנוּ מְעַט מֵהַרְבֵּה: וּבְכָל זאת שִׁמְךָ לא שָׁכָחְנוּ. נָא אַל תִּשְׁכָּחֵנוּ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "עָזְרֵנוּ אֱלהֵי יִשְׁעֵנוּ עַל דְּבַר כְּבוד שְׁמֶךָ. וְהַצִּילֵנוּ וְכַפֵּר עַל חַטּאתֵינוּ לְמַעַן שְׁמֶךָ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                      ],
-                    )
-                  : Container(),
-              (JewishCalendar.fromDateTime(DateTime.now()).isTaanis())
-                  ? Column(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "שׁומֵר יִשרָאֵל. שְׁמר שְׁאֵרִית יִשרָאֵל. וְאַל יאבַד יִשרָאֵל. הָאומְרִים שְׁמַע יִשרָאֵל:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "שׁומֵר גּוי אֶחָד. שְׁמר שְׁאֵרִית עַם אֶחָד. וְאַל יאבַד גּוי אֶחָד. הַמְיַחֲדִים שִׁמְךָ ה' אֱלהֵינוּ ה' אֶחָד:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "שׁומֵר גּוי קָדושׁ. שְׁמר שְׁאֵרִית עַם קָדושׁ. וְאַל יאבַד גּוי קָדושׁ. הַמְשַׁלְּשִׁים בְּשָׁלשׁ קְדֻשּׁות לְקָדושׁ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "מִתְרַצֶּה בְּרַחֲמִים וּמִתְפַּיֵּס בְּתַחֲנוּנִים. הִתְרַצֶּה וְהִתְפַּיֵּס לְדור עָנִי. כִּי אֵין עוזֵר: אָבִינוּ מַלְכֵּנוּ. חָנֵּנוּ וַעֲנֵנוּ. כִּי אֵין בָּנוּ מַעֲשים. עֲשה עִמָּנוּ צְדָקָה וָחֶסֶד וְהושִׁיעֵנוּ:",
-                              textAlign: TextAlign.justify,
-                              textDirection: TextDirection.rtl,
-                              style: GoogleFonts.suezOne(fontSize: 24),
-                            )),
-                      ],
-                    )
-                  : Container(),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "וַאֲנַחְנוּ לא נֵדַע מַה נַּעֲשה. כִּי עָלֶיךָ עֵינֵינוּ: זְכר רַחֲמֶיךָ ה' וַחֲסָדֶיךָ. כִּי מֵעולָם הֵמָּה: יְהִי חַסְדְּךָ ה' עָלֵינוּ. כַּאֲשֶׁר יִחַלְנוּ לָךְ: אַל תִּזְכָּר לָנוּ עֲונות רִאשׁונִים. מַהֵר יְקַדְּמוּנוּ רַחֲמֶיךָ. כִּי דַלּונוּ מְאד: חָנֵּנוּ ה' חָנֵּנוּ. כִּי רַב שבַעְנוּ בוּז: בְּרגֶז רַחֵם תִּזְכּור. כִּי הוּא יָדַע יִצְרֵנוּ. זָכוּר כִּי עָפָר אֲנָחְנוּ: עָזְרֵנוּ אֱלהֵי יִשְׁעֵנוּ עַל דְּבַר כְּבוד שְׁמֶךָ. וְהַצִּילֵנוּ וְכַפֵּר עַל חַטּאתֵינוּ לְמַעַן שְׁמֶךָ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-            ],
-          )
+      children: [
+        (DateTime
+            .now()
+            .weekday == DateTime.monday ||
+            DateTime
+                .now()
+                .weekday == DateTime.thursday)
+            ? Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container()),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "וְהוּא רַחוּם יְכַפֵּר עָון וְלא יַשְׁחִית. וְהִרְבָּה לְהָשִׁיב אַפּו וְלא יָעִיר כָּל חֲמָתו: אַתָּה ה'. לא תִכְלָא רַחֲמֶיךָ מִמֶּנּוּ. חַסְדְּךָ וַאֲמִתְּךָ תָּמִיד יִצְּרוּנוּ: הושִׁיעֵנוּ ה' אֱלהֵינוּ וְקַבְּצֵנוּ מִן הַגּויִם. לְהודות לְשֵׁם קָדְשֶׁךָ. לְהִשְׁתַּבֵּחַ בִּתְהִלָּתֶךָ: אִם עֲונות תִּשְׁמָר יָהּ. אֲדנָי מִי יַעֲמד: כִּי עִמְּךָ הַסְּלִיחָה לְמַעַן תִּוָּרֵא: לא כַחֲטָאֵינוּ תַּעֲשה לָנוּ וְלא כַעֲונותֵינוּ תִּגְמל עָלֵינוּ: אִם עֲונֵינוּ עָנוּ בָנוּ. ה'. עֲשה לְמַעַן שְׁמֶךָ: זְכר רַחֲמֶיךָ ה' וַחֲסָדֶיךָ. כִּי מֵעולָם הֵמָּה: יַעֲנֵנוּ ה' בְּיום צָרָה. יְשגְּבֵנוּ שֵׁם אֱלהֵי יַעֲקב: ה' הושִׁיעָה. הַמֶּלֶךְ יַעֲנֵנוּ בְיום קָרְאֵנוּ: אָבִינוּ מַלְכֵּנוּ חָנֵּנוּ וַעֲנֵנוּ. כִּי אֵין בָּנוּ מַעֲשים. צְדָקָה עֲשה עִמָּנוּ לְמַעַן שְׁמֶךָ: אֲדונֵינוּ אֱלהֵינוּ. שְׁמַע קול תַּחֲנוּנֵינוּ. וּזְכָר לָנוּ אֶת בְּרִית אֲבותֵינוּ וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ: וְעַתָּה אֲדנָי אֱלהֵינוּ. אֲשֶׁר הוצֵאתָ אֶת עַמְּךָ מֵאֶרֶץ מִצְרַיִם בְּיָד חֲזָקָה וַתַּעַש לְךָ שֵׁם כַּיּום הַזֶּה. חָטָאנוּ רָשָׁעְנוּ: אֲדנָי. כְּכָל צִדְקותֶיךָ יָשָׁב נָא אַפְּךָ וַחֲמָתְךָ מֵעִירְךָ יְרוּשָׁלַיִם הַר קָדְשֶׁךָ. כִּי בַחֲטָאֵינוּ וּבַעֲונות אֲבתֵינוּ. יְרוּשָׁלַיִם וְעַמְּךָ לְחֶרְפָּה לְכָל סְבִיבתֵינוּ: וְעַתָּה שְׁמַע אֱלהֵינוּ אֶל תְּפִלַּת עַבְדְּךָ וְאֶל תַּחֲנוּנָיו. וְהָאֵר פָּנֶיךָ עַל מִקְדָּשְׁךָ הַשָּׁמֵם. לְמַעַן אֲדנָי:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "הַטֵּה אֱלהַי אָזְנְךָ וּשְׁמָע. פְּקַח עֵינֶיךָ וּרְאֵה שׁומְמותֵינוּ וְהָעִיר אֲשֶׁר נִקְרָא שִׁמְךָ עָלֶיהָ. כִּי לא עַל צִדְקותֵינוּ אֲנַחְנוּ מַפִּילִים תַּחֲנוּנֵינוּ לְפָנֶיךָ. כִּי עַל רַחֲמֶיךָ הָרַבִּים: אֲדנָי שְׁמָעָה. אֲדנָי סְלָחָה. אֲדנָי הַקְשִׁיבָה. וַעֲשה אַל תְּאַחַר. לְמַעַנְךָ אֱלהַי. כִּי שִׁמְךָ נִקְרָא עַל עִירְךָ וְעַל עַמֶּךָ: אָבִינוּ הָאָב הָרַחֲמָן. הַרְאֵנוּ אות לְטובָה וְקַבֵּץ נְפוּצותֵינוּ מֵאַרְבַּע כַּנְפות הָאָרֶץ. יַכִּירוּ וְיֵדְעוּ כָּל הַגּויִם. כִּי אַתָּה ה' אֱלהֵינוּ: וְעַתָּה ה' אָבִינוּ אָתָּה. אֲנַחְנוּ הַחמֶר וְאַתָּה יצְרֵנוּ וּמַעֲשה יָדְךָ כֻּלָּנוּ: הושִׁיעֵנוּ לְמַעַן שְׁמֶךָ. צוּרֵנוּ מַלְכֵּנוּ וְגואֲלֵנוּ: חוּסָה ה' עַל עַמֶּךָ וְאַל תִּתֵּן נַחֲלָתְךָ לְחֶרְפָּה לִמְשָׁל בָּם גּויִם. לָמָּה יאמְרוּ בָעַמִּים אַיֵּה אֱלהֵיהֶם: יָדַעְנוּ כִּי חָטָאנוּ וְאֵין מִי יַעֲמד בַּעֲדֵנוּ. שִׁמְךָ הַגָּדול יַעֲמָד לָנוּ בְּעֵת צָרָה. יָדַעְנוּ כִּי אֵין בָּנוּ מַעֲשים. צְדָקָה עֲשה עִמָּנוּ לְמַעַן שְׁמֶךָ: כְּרַחֵם אָב עַל בָּנִים כֵּן תְּרַחֵם ה' עָלֵינוּ. וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ: חֲמול עַל עַמֶּךָ. רַחֵם עַל נַחֲלָתֶךָ. חוּסָה נָּא כְּרוב רַחֲמֶיךָ. חָנֵּנוּ מַלְכֵּנוּ וַעֲנֵנוּ. כִּי לְךָ ה' הַצְּדָקָה. עשה נִפְלָאות בְּכָל עֵת:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "הַבֶּט נָא רַחֶם נָא עַל עַמְךָ מְהֵרָה לְמַעַן שְׁמֶךָ. בְּרַחֲמֶיךָ הָרַבִּים ה' אֱלהֵינוּ חוּס וְרַחֵם וְהושִׁיעָה צאן מַרְעִיתֶךָ. וְאַל יִמְשָׁל בָּנוּ קֶצֶף. כִּי לְךָ עֵינֵינוּ תְלוּיות. הושִׁיעֵנוּ לְמַעַן שְׁמֶּךָ.רַחֵם עָלֵינוּ לְמַעַן בְּרִיתֶךָ הַבִּיטָה וַעֲנֵנוּ בְּעֵת צָרָה. כִּי לְךָ ה' הַיְשׁוּעָה. בְּךָ תוחַלְתֵּנוּ אֱלוהַּ סְלִיחות. אָנָּא סְלַח נָא. אֵל טוב וְסַלָּח כִּי אֵל מֶלֶךְ חַנוּן וְרַחוּם אָתָּה:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "אָנָּא מֶלֶךְ חַנּוּן וְרַחוּם. זְכר וְהַבֵּט לִבְרִית בֵּין הַבְּתָרִים וְתֵרָאֶה לְפָנֶיךָ עֲקֵדַת יָחִיד לְמַעַן יִשרָאֵל. אָבִינוּ מַלְכֵּנוּ חָנֵּנוּ וַעֲנֵנוּ. כִּי שִׁמְךָ הַגָּדול נִקְרָא עָלֵינוּ. עשה נִפְלָאות בְּכָל עֵת. עֲשה עִמָּנוּ כְּחַסְדֶּךָ. חַנּוּן וְרַחוּם. הַבִּיטָה וַעֲנֵנוּ בְּעֵת צָרָה. כִּי לְךָ ה' הַיְשׁוּעָה. אָבִינוּ מַלְכֵּנוּ מַחֲסֵנוּ אַל תַּעַשׁ עִמָּנוּ כְּרעַ מַעֲלָלֵנוּ זְכור רַחֲמֶיךָ ה' וַחֲסָדֶיךָ וּכְרב טוּבְךָ הושִׁיעֵנוּ וַחֲמָל נָא עָלֵינוּ כִּי אֵין לָנוּ אֱלוהַּ אַחֵר מִבַּלְעָדֶיךָ צוּרֵנוּ אַל תַּעַזְבֵנוּ ה' אֱלהֵינוּ אַל תִּרְחַק מִמֶּנוּ כִּי נַפְשֵׁנוּ קְצָרָה. מֵחֶרֵב וּמִשְּׁבִי וּמִדֶּבֶר וּמִמַּגֵּפָה וּמִכָּל צָרָה וְיָגון הַצִּילֵנוּ כִּי לְךָ קִוִּינוּ וְאַל תַּכְלִימֵנוּ ה' אֱלהֵינוּ וְהָאֵר פָּנֶיךָ בָּנוּ וּזְכר לָנוּ אֶת בְּרִית אֲבותֵינוּ וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ. רְאֵה בְצָרותֵינוּ וּשְׁמַע קול תְּפִלָּתֵנוּ. כִּי אַתָּה שׁומֵע תְּפִלַּת כָּל פֶּה:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "אֵל רַחוּם וְחַנּוּן, רַחֵם עָלֵינוּ וְעַל כָּל מַעֲשיךָ, כִּי אֵין כָּמוךָ ה' אֱלהֵינוּ, אָנָּא שא נָא פְשָׁעֵינוּ. אָבִינוּ מַלְכֵּנוּ צוּרֵנוּ וְגואֲלֵנוּ, אֵל חַי וְקַיָּם הֶחָסִין בַּכּחַ, חָסִיד וְטוב עַל כָּל מַעֲשיךָ, כִּי אַתָּה הוּא ה' אֱלהֵינוּ. אֵל אֶרֶךְ אַפַּיִם וּמָלֵא רַחֲמִים, עֲשה עִמָּנוּ כְּרב רַחֲמֶיךָ, וְהושִׁיעֵנוּ לְמַעַן שְׁמֶךָ. שְׁמַע מַלְכֵּנוּ תְּפִלָּתֵנוּ, וּמִיַּד אויְבֵינוּ הַצִּילֵנוּ. שְׁמַע מַלְכֵּנוּ תְּפִלָתֵנוּ וּמִכָּל צָרָה וְיָגון הַצִּילֵנוּ. אָבִינוּ מַלְכֵּנוּ אַתָּה, וְשִׁמְךָ עָלֵינוּ נִקְרָא, אַל תַּנִּיחֵנוּ. אַל תַּעַזְבֵנ אָבִינוּ, וְאַל תִּטְשֵׁנוּ בּורְאֵנוּ, וְאַל תִּשְׁכָּחֵנוּ יוצְרֵנוּ, כִּי אֵל מֶלֶךְ חַנּוּן וְרַחוּם אָתָּה:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "אֵין כָּמוךָ חַנּוּן וְרַחוּם ה' אֱלהֵינוּ. אֵין כָּמוךָ אֵל אֶרֶךְ אַפַּיִם וְרַב חֶסֶד וֶאֱמֶת. הושִׁיעֵנוּ בְּרַחֲמֶיךָ הָרַבִּים. מֵרַעַשׁ וּמֵרגֶז הַצִּילֵנוּ: זְכור לַעֲבָדֶיךָ לְאַבְרָהָם לְיִצְחָק וּלְיַעֲקב. אַל תֵּפֶן אֶל קָשְׁיֵנוּ וְאֶל רִשְׁעֵנוּ וְאֶל חַטָּאתֵנוּ שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ: וְהָסֵר מִמֶּנּוּ מַכַּת הַמָּוֶת כִּי רַחוּם אָתָּה. כִּי כֵן דַּרְכֶּךָ. עושה חֶסֶד חִנָּם בְּכָל דּור וָדור. חוּסָה ה' עַל עַמֶּךָ וְהַצִּילֵנוּ מִזַּעְמֶךָ. וְהָסֵר מִמֶּנּוּ מַכַּת הַמַּגֵּפָה וּגְזֵרָה קָשָׁה. כִּי אַתָּה שׁומֵר יִשרָאֵל: לְךָ אֲדנָי הַצְּדָקָה וְלָנוּ בּשֶׁת הַפָּנִים. מַה נִּתְאונֵן מַה נּאמַר מַה נְּדַבֵּר וּמַה נִּצְטַדָּק: נַחְפְּשה דְרָכֵינוּ וְנַחְקרָה וְנָשׁוּבָה אֵלֶיךָ. כִּי יְמִינְךָ פְשׁוּטָה לְקַבֵּל שָׁבִים: אָנָּא ה' הושִׁיעָה נָּא. אָנָּא ה' הַצְּלִיחָה נָא: אָנָּא ה' עֲנֵנוּ בְיום קָרְאֵנוּ: לְךָ ה' חִכִּינוּ. לְךָ ה' קִוִּינוּ. לְךָ ה' נְיַחֵל. אַל תֶּחֱשֶׁה וּתְעַנֵּנוּ. כִּי נָאֲמוּ גּויִם. אָבְדָה תִקְוָתָם. כָּל בֶּרֶךְ וְכָל קומָה לְךָ לְבַד תִּשְׁתַּחֲוֶה:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "הַפּותֵחַ יָד בִּתְשׁוּבָה לְקַבֵּל פּושְׁעִים וְחַטָּאִים. נִבְהֲלָה נַפְשֵׁנוּ מֵרב עִצְּבונֵנוּ. אַל תִּשְׁכָּחֵנוּ נֶצַח. קוּמָה וְהושִׁיעֵנוּ. כִּי חָסִינוּ בָךְ. אָבִינוּ מַלְכֵּנוּ. אִם אֵין בָּנוּ צְדָקָה וּמַעֲשים טובִים. זְכָר לָנוּ אֶת בְּרִית אֲבותֵינוּ. וְעֵדותֵינוּ בְּכָל יום ה' אֶחָד. הַבִּיטָה בְעָנְיֵנוּ. כִּי רַבּוּ מַכְאובֵינוּ. וְצָרות לְבָבֵנוּ. חוּסָה ה' עָלֵינוּ. וְאַל תִּשְׁפּךְ חֲרונְךָ עָלֵינוּ. כִּי אֲנַחְנוּ עַמְּךָ בְּנֵי בְרִיתֶךָ. אֵל הַבִּיטָה. דַּל כְּבודֵנוּ בַּגּויִים וְשִׁקְּצוּנוּ כְּטֻמְאַת הַנִּדָּה. עַד מָתַי עֻזְּךָ בַּשְּׁבִי. וְתִפְאַרְתְּךָ בְּיַד צָר. עורְרָה גְבוּרָתְךָ וְקִנְאָתְךָ עַל אויְבֶיךָ. הֵם יֵבושׁוּ וְיֵחַתּוּ מִגְבוּרָתָם. וְאַל יִמְעֲטוּ לְפָנֶיךָ תְּלָאותֵינוּ. מַהֵר יְקַדְּמוּנוּ רַחֲמֶיךָ בְּיום צָרָתֵנוּ. וְאִם לא לְמַעֲנֵנוּ לְמַעַנְךָ פְּעַל. וְאַל תַּשְׁחִית זֵכֶר שְׁאֵרִיתֵנוּ וְחון אם הַמְיַחֲדִים שִׁמְךָ פַּעֲמַיִם בְּכָל יום תָּמִיד בְּאַהֲבָה וְאומְרִים שְׁמַע יִשרָאֵל. ה' אֱלהֵינוּ. ה' אֶחָד:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+          ],
+        )
+            : Container(),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "רַחוּם וְחַנּוּן חָטָאתִי לְפָנֶיךָ. ה' מָלֵא רַחֲמִים. רַחֵם עָלַי וְקַבֵּל תַּחֲנוּנָי: ה' אַל בְּאַפְּךָ תוכִיחֵנִי. וְאַל בַּחֲמָתְךָ תְיַסְּרֵנִי: חָנֵּנִי ה'. כִּי אֻמְלַל אָנִי. רְפָאֵנִי ה'. כִּי נִבְהֲלוּ עֲצָמָי: וְנַפְשִׁי נִבְהֲלָה מְאד. וְאַתָּה ה' עַד מָתָי: שׁוּבָה ה'. חַלְּצָה נַפְשִׁי. הושִׁיעֵנִי לְמַעַן חַסְדֶּךָ: כִּי אֵין בַּמָּוֶת זִכְרֶךָ. בִּשְׁאול מִי יודֶה לָּךְ: יָגַעְתִּי בְאַנְחָתִי. אַשחֶה בְכָל לַיְלָה מִטָּתִי. בְּדִמְעָתִי עַרְשי אַמְסֶה: עָשְׁשָׁה מִכַּעַס עֵינִי. עָתְקָה בְּכָל צורְרָי: סוּרוּ מִמֶּנִּי כָּל פּעֲלֵי אָוֶן. כִּי שָׁמַע ה' קול בִּכְיִי: שָׁמַע ה' תְּחִנָּתִי. ה' תְּפִלָּתִי יִקָּח: יֵבשׁוּ וְיִבָּהֲלוּ מְאד כָּל איְבָי. יָשֻׁבוּ יֵבשׁוּ רָגַע:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        (DateTime
+            .now()
+            .weekday == DateTime.monday ||
+            DateTime
+                .now()
+                .weekday == DateTime.thursday)
+            ? Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ: הַבֵּט מִשָּׁמַיִם וּרְאֵה כִּי הָיִינוּ לַעַג וָקֶלֶס בַּגּויִם. נֶחְשַׁבְנוּ כַּצּאן לַטֶּבַח יוּבָל. לַהֲרוג וּלְאַבֵּד וּלְמַכָּה וּלְחֶרְפָּה: וּבְכָל זאת שִׁמְךָ לא שָׁכָחְנוּ. נָא אַל תִּשְׁכָּחֵנוּ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "זָרִים אומְרִים אֵין תּוחֶלֶת וְתִקְוָה. חון אום לְשִׁמְךָ מְקַוֶּה. טָהור. יְשׁוּעָתֵנוּ קָרְבָה. יָגַעְנוּ וְלא הוּנַח לָנוּ. רַחֲמֶיךָ יִכְבְּשׁוּ אֶת כַּעַסְךָ מֵעָלֵינוּ: אָנָּא שׁוּב מֵחֲרונְךָ וְרַחֵם סְגֻלָּה אֲשֶׁר בָּחָרְתָּ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "חוּסָה ה' עָלֵינוּ בְּרַחֲמֶיךָ וְאַל תִּתְּנֵנוּ בִּידֵי אַכְזָרִים. לָמָּה יאמְרוּ הַגּויִם אַיֵּה נָא אֱלהֵיהֶם. לְמַעַנְךָ עֲשה עִמָּנוּ חֶסֶד וְאַל תְּאַחַר: אָנָּא שׁוּב מֵחֲרונְךָ וְרַחֵם סְגֻלָּה אֲשֶׁר בָּחָרְתָּ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "קולֵנוּ תִשְׁמַע וְתָחון. וְאַל תִּטְּשֵׁנוּ בְּיַד איְבֵינוּ לִמְחות אֶת שְׁמֵנוּ. זְכר אֲשֶׁר נִשְׁבַּעְתָּ לַאֲבותֵינוּ כְּכוכְבֵי הַשָּׁמַיִם אַרְבֶּה אֶת זַרְעֲכֶם. וְעַתָּה נִשְׁאַרְנוּ מְעַט מֵהַרְבֵּה: וּבְכָל זאת שִׁמְךָ לא שָׁכָחְנוּ. נָא אַל תִּשְׁכָּחֵנוּ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "עָזְרֵנוּ אֱלהֵי יִשְׁעֵנוּ עַל דְּבַר כְּבוד שְׁמֶךָ. וְהַצִּילֵנוּ וְכַפֵּר עַל חַטּאתֵינוּ לְמַעַן שְׁמֶךָ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "ה' אֱלהֵי יִשרָאֵל. שׁוּב מֵחֲרון אַפֶּךָ וְהִנָּחֵם עַל הָרָעָה לְעַמֶּךָ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+          ],
+        )
+            : Container(),
+        (JewishCalendar.fromDateTime(DateTime.now()).isTaanis())
+            ? Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "שׁומֵר יִשרָאֵל. שְׁמר שְׁאֵרִית יִשרָאֵל. וְאַל יאבַד יִשרָאֵל. הָאומְרִים שְׁמַע יִשרָאֵל:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "שׁומֵר גּוי אֶחָד. שְׁמר שְׁאֵרִית עַם אֶחָד. וְאַל יאבַד גּוי אֶחָד. הַמְיַחֲדִים שִׁמְךָ ה' אֱלהֵינוּ ה' אֶחָד:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "שׁומֵר גּוי קָדושׁ. שְׁמר שְׁאֵרִית עַם קָדושׁ. וְאַל יאבַד גּוי קָדושׁ. הַמְשַׁלְּשִׁים בְּשָׁלשׁ קְדֻשּׁות לְקָדושׁ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "מִתְרַצֶּה בְּרַחֲמִים וּמִתְפַּיֵּס בְּתַחֲנוּנִים. הִתְרַצֶּה וְהִתְפַּיֵּס לְדור עָנִי. כִּי אֵין עוזֵר: אָבִינוּ מַלְכֵּנוּ. חָנֵּנוּ וַעֲנֵנוּ. כִּי אֵין בָּנוּ מַעֲשים. עֲשה עִמָּנוּ צְדָקָה וָחֶסֶד וְהושִׁיעֵנוּ:",
+                  textAlign: TextAlign.justify,
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.suezOne(fontSize: 24),
+                )),
+          ],
+        )
+            : Container(),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "וַאֲנַחְנוּ לא נֵדַע מַה נַּעֲשה. כִּי עָלֶיךָ עֵינֵינוּ: זְכר רַחֲמֶיךָ ה' וַחֲסָדֶיךָ. כִּי מֵעולָם הֵמָּה: יְהִי חַסְדְּךָ ה' עָלֵינוּ. כַּאֲשֶׁר יִחַלְנוּ לָךְ: אַל תִּזְכָּר לָנוּ עֲונות רִאשׁונִים. מַהֵר יְקַדְּמוּנוּ רַחֲמֶיךָ. כִּי דַלּונוּ מְאד: חָנֵּנוּ ה' חָנֵּנוּ. כִּי רַב שבַעְנוּ בוּז: בְּרגֶז רַחֵם תִּזְכּור. כִּי הוּא יָדַע יִצְרֵנוּ. זָכוּר כִּי עָפָר אֲנָחְנוּ: עָזְרֵנוּ אֱלהֵי יִשְׁעֵנוּ עַל דְּבַר כְּבוד שְׁמֶךָ. וְהַצִּילֵנוּ וְכַפֵּר עַל חַטּאתֵינוּ לְמַעַן שְׁמֶךָ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+      ],
+    )
         : Container(),
     // Torah Reading
-    (DateTime.now().weekday == DateTime.monday ||
-            DateTime.now().weekday == DateTime.thursday)
+    (DateTime
+        .now()
+        .weekday == DateTime.monday ||
+        DateTime
+            .now()
+            .weekday == DateTime.thursday)
         ? Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ExpansionTile(
-                        title: Center(
-                            child: Text(
-                          "Kaddish",
-                        )),
-                        children: [
-                          Text(
-                            "יִתְגַּדֵּל וְיִתְקַדֵּשׁ שְׁמֵהּ רַבָּא.\nבְּעָלְמָא דִּי בְרָא כִּרְעוּתֵהּ וְיַמְלִיךְ מַלְכוּתֵהּ בְּחַיֵּיכון וּבְיומֵיכון וּבְחַיֵּי דְכָל בֵּית יִשרָאֵל, בַּעֲגָלָא וּבִזְמַן קָרִיב, וְאִמְרוּ אָמֵן.\nיְהֵא שְׁמֵהּ רַבָּא מְבָרַךְ לְעָלַם וּלְעָלְמֵי עָלְמַיָּא.\nיִתְבָּרַךְ וְיִשְׁתַּבַּח וְיִתְפָּאַר וְיִתְרומַם וְיִתְנַשׁא וְיִתְהַדַּר וְיִתְעַלֶּה שְׁמֵהּ דְּקֻדְשָׁא. בְּרִיךְ הוּא.\nלְעֵלָּא מִן כָּל בִּרְכָתָא וְשִׁירָתָא תֻּשְׁבְּחָתָא וְנֶחֱמָתָא דַּאֲמִירָן בְּעָלְמָא, וְאִמְרוּ אָמֵן.",
-                            textAlign: TextAlign.justify,
-                            textDirection: TextDirection.rtl,
-                            style: GoogleFonts.suezOne(fontSize: 24),
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
-              (JewishCalendar.fromDateTime(DateTime.now()).isTachanun())
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
+      children: [
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ExpansionTile(
+                  title: Center(
                       child: Text(
-                        "אֵל אֶרֶךְ אַפַּיִם וְרַב חֶסֶד וֶאֱמֶת. אַל בְּאַפְּךָ תוכִיחֵנוּ. חוּסָה ה' עַל יִשרָאֵל עַמֶּךָ וְהושִׁיעֵנוּ מִכָּל רָע. חָטָאנוּ לְךָ אָדון. סְלַח נָא כְּרוב רַחֲמֶיךָ אֵל:",
-                        textAlign: TextAlign.justify,
-                        textDirection: TextDirection.rtl,
-                        style: GoogleFonts.suezOne(fontSize: 24),
-                      ))
-                  : Container(),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "וַיְהִי בִּנְסעַ הָאָרן וַיּאמֶר משֶׁה קוּמָה ה' וְיָפֻצוּ איְבֶיךָ וְיָנֻסוּ מְשנְאֶיךָ מִפָּנֶיךָ: כִּי מִצִּיּון תֵּצֵא תורָה וּדְבַר ה' מִירוּשָׁלָיִם: בָּרוּךְ שֶׁנָּתַן תּורָה לְעַמּו יִשרָאֵל בִּקְדֻשָּׁתו:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "בְּרִיךְ שְׁמֵהּ דְּמָרֵא עָלְמָא. בְּרִיךְ כִּתְרָךְ וְאַתְרָךְ. יְהֵא רְעוּתָךְ עִם עַמָּךְ יִשרָאֵל לְעָלַם. וּפֻרְקַן יְמִינָךְ אַחֲזֵי לְעַמָּךְ בְּבֵית מַקְדְּשָׁךְ. וּלְאַמְטויֵי לָנָא מִטּוּב נְהורָךְ וּלְקַבֵּל צְלותָנָא בְּרַחֲמִין. יְהֵא רַעֲוָא קֳדָמָךְ דְּתורִיךְ לָן חַיִּין בְּטִיבוּ. וְלֶהֱוֵי אֲנָא פְקִידָא בְּגו צַדִּיקַיָּא. לְמִרְחַם עָלַי וּלְמִנְטַר יָתִי וְיַת כָּל דִּי לִי וְדִי לְעַמָּךְ יִשרָאֵל. אַנְתְּ הוּא זָן לְכלָּא וּמְפַרְנֵס לְכלָּא. אַנְתְּ הוּא שַׁלִּיט עַל כּלָּא. אַנְתְּ הוּא דְשַׁלִּיט עַל מַלְכַיָּא. וּמַלְכוּתָא דִּילָךְ הִיא. אֲנָא עַבְדָּא דְקֻדְשָׁא בְּרִיךְ הוּא דְּסָגִידְנָא קַמֵּהּ וּמִקַּמֵּי דִּיקַר אורַיְתֵהּ בְּכָל עִדָּן וְעִדָּן. לָא עַל אֱנָשׁ רָחִיצְנָא וְלָא עַל בַּר אֱלָהִין סָמִיכְנָא. אֶלָּא בֶּאֱלָהָא דִשְׁמַיָּא. דְּהוּא אֱלָהָא קְשׁוט וְאורַיְתֵהּ קְשׁוט וּנְבִיאוהִי קְשׁוט. וּמַסְגֵּא לְמֶעְבַּד טַבְוָן וּקְשׁוט. בֵּהּ אֲנָא רָחִיץ. וְלִשְׁמֵהּ יַקִּירָא קַדִּישָׁא אֲנָא אֵמַר תֻּשְׁבְּחָן. יְהֵא רַעֲוָא קֳדָמָךְ דְּתִפְתַּח לִבָּאִי בְּאורַיְתָא. וְתַשְׁלִים מִשְׁאֲלִין דְּלִבָּאי וְלִבָּא דְכָל עַמָּךְ יִשרָאֵל. לְטַב וּלְחַיִּין וְלִשְׁלָם:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "חזן: גַּדְּלוּ לה' אִתִּי וּנְרומְמָה שְׁמו יַחְדָּו:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "קהל: לְךָ ה' הַגְּדֻלָּה וְהַגְּבוּרָה וְהַתִּפְאֶרֶת וְהַנֵּצַח וְהַהוד כִּי כל בַּשָּׁמַיִם וּבָאָרֶץ: לְךָ ה' הַמַּמְלָכָה וְהַמִּתְנַשּא לְכל לְראשׁ: רומְמוּ ה' אֱלהֵינוּ וְהִשְׁתַּחֲווּ לַהֲדם רַגְלָיו קָדושׁ הוּא: רומְמוּ ה' אֱלהֵינוּ וְהִשְׁתַּחֲווּ לְהַר קָדְשׁו כִּי קָדושׁ ה' אֱלהֵינוּ:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "אַב הָרַחֲמִים. הוּא יְרַחֵם עַם עֲמוּסִים וְיִזְכּור בְּרִית אֵיתָנִים. וְיַצִּיל נַפְשׁותֵינוּ מִן הַשָּׁעות הָרָעות. וְיִגְעַר בְּיֵצֶר הָרָע מִן הַנְּשוּאִים. וְיָחון אותָנוּ לִפְלֵיטַת עולָמִים. וִימַלֵּא מִשְׁאֲלותֵינוּ בְּמִדָּה טובָה יְשׁוּעָה וְרַחֲמִים:",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "וְתִגָּלֶה וְתֵרָאֶה מַלְכוּתו עָלֵינוּ בִּזְמַן קָרוב. וְיָחון פְּלֵטָתֵנוּ וּפְלֵטַת עַמּו בֵּית יִשרָאֵל לְחֵן וּלְחֶסֶד וּלְרַחֲמִים וּלְרָצון וְנאמַר אָמֵן. הַכּל הָבוּ גדֶל לֵאלהֵינוּ וּתְנוּ כָבוד לַתּורָה. כּהֵן קְרָב יַעֲמד [פלוני בן פלוני] הַכּהֵן.",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    " בָּרוּךְ שֶׁנָּתַן תּורָה לְעַמּו יִשרָאֵל בִּקְדֻשָּׁתו:",
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "",
-                    textAlign: TextAlign.justify,
-                    textDirection: TextDirection.rtl,
-                    style: GoogleFonts.suezOne(fontSize: 24),
-                  )),
-              // TODO: add Torah Portion
-            ],
-          )
+                        "Kaddish",
+                      )),
+                  children: [
+                    Text(
+                      "יִתְגַּדֵּל וְיִתְקַדֵּשׁ שְׁמֵהּ רַבָּא.\nבְּעָלְמָא דִּי בְרָא כִּרְעוּתֵהּ וְיַמְלִיךְ מַלְכוּתֵהּ בְּחַיֵּיכון וּבְיומֵיכון וּבְחַיֵּי דְכָל בֵּית יִשרָאֵל, בַּעֲגָלָא וּבִזְמַן קָרִיב, וְאִמְרוּ אָמֵן.\nיְהֵא שְׁמֵהּ רַבָּא מְבָרַךְ לְעָלַם וּלְעָלְמֵי עָלְמַיָּא.\nיִתְבָּרַךְ וְיִשְׁתַּבַּח וְיִתְפָּאַר וְיִתְרומַם וְיִתְנַשׁא וְיִתְהַדַּר וְיִתְעַלֶּה שְׁמֵהּ דְּקֻדְשָׁא. בְּרִיךְ הוּא.\nלְעֵלָּא מִן כָּל בִּרְכָתָא וְשִׁירָתָא תֻּשְׁבְּחָתָא וְנֶחֱמָתָא דַּאֲמִירָן בְּעָלְמָא, וְאִמְרוּ אָמֵן.",
+                      textAlign: TextAlign.justify,
+                      textDirection: TextDirection.rtl,
+                      style: GoogleFonts.suezOne(fontSize: 24),
+                    )
+                  ],
+                ),
+              ),
+            )),
+        (JewishCalendar.fromDateTime(DateTime.now()).isTachanun())
+            ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אֵל אֶרֶךְ אַפַּיִם וְרַב חֶסֶד וֶאֱמֶת. אַל בְּאַפְּךָ תוכִיחֵנוּ. חוּסָה ה' עַל יִשרָאֵל עַמֶּךָ וְהושִׁיעֵנוּ מִכָּל רָע. חָטָאנוּ לְךָ אָדון. סְלַח נָא כְּרוב רַחֲמֶיךָ אֵל:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
+            : Container(),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "וַיְהִי בִּנְסעַ הָאָרן וַיּאמֶר משֶׁה קוּמָה ה' וְיָפֻצוּ איְבֶיךָ וְיָנֻסוּ מְשנְאֶיךָ מִפָּנֶיךָ: כִּי מִצִּיּון תֵּצֵא תורָה וּדְבַר ה' מִירוּשָׁלָיִם: בָּרוּךְ שֶׁנָּתַן תּורָה לְעַמּו יִשרָאֵל בִּקְדֻשָּׁתו:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "בְּרִיךְ שְׁמֵהּ דְּמָרֵא עָלְמָא. בְּרִיךְ כִּתְרָךְ וְאַתְרָךְ. יְהֵא רְעוּתָךְ עִם עַמָּךְ יִשרָאֵל לְעָלַם. וּפֻרְקַן יְמִינָךְ אַחֲזֵי לְעַמָּךְ בְּבֵית מַקְדְּשָׁךְ. וּלְאַמְטויֵי לָנָא מִטּוּב נְהורָךְ וּלְקַבֵּל צְלותָנָא בְּרַחֲמִין. יְהֵא רַעֲוָא קֳדָמָךְ דְּתורִיךְ לָן חַיִּין בְּטִיבוּ. וְלֶהֱוֵי אֲנָא פְקִידָא בְּגו צַדִּיקַיָּא. לְמִרְחַם עָלַי וּלְמִנְטַר יָתִי וְיַת כָּל דִּי לִי וְדִי לְעַמָּךְ יִשרָאֵל. אַנְתְּ הוּא זָן לְכלָּא וּמְפַרְנֵס לְכלָּא. אַנְתְּ הוּא שַׁלִּיט עַל כּלָּא. אַנְתְּ הוּא דְשַׁלִּיט עַל מַלְכַיָּא. וּמַלְכוּתָא דִּילָךְ הִיא. אֲנָא עַבְדָּא דְקֻדְשָׁא בְּרִיךְ הוּא דְּסָגִידְנָא קַמֵּהּ וּמִקַּמֵּי דִּיקַר אורַיְתֵהּ בְּכָל עִדָּן וְעִדָּן. לָא עַל אֱנָשׁ רָחִיצְנָא וְלָא עַל בַּר אֱלָהִין סָמִיכְנָא. אֶלָּא בֶּאֱלָהָא דִשְׁמַיָּא. דְּהוּא אֱלָהָא קְשׁוט וְאורַיְתֵהּ קְשׁוט וּנְבִיאוהִי קְשׁוט. וּמַסְגֵּא לְמֶעְבַּד טַבְוָן וּקְשׁוט. בֵּהּ אֲנָא רָחִיץ. וְלִשְׁמֵהּ יַקִּירָא קַדִּישָׁא אֲנָא אֵמַר תֻּשְׁבְּחָן. יְהֵא רַעֲוָא קֳדָמָךְ דְּתִפְתַּח לִבָּאִי בְּאורַיְתָא. וְתַשְׁלִים מִשְׁאֲלִין דְּלִבָּאי וְלִבָּא דְכָל עַמָּךְ יִשרָאֵל. לְטַב וּלְחַיִּין וְלִשְׁלָם:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "חזן: גַּדְּלוּ לה' אִתִּי וּנְרומְמָה שְׁמו יַחְדָּו:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "קהל: לְךָ ה' הַגְּדֻלָּה וְהַגְּבוּרָה וְהַתִּפְאֶרֶת וְהַנֵּצַח וְהַהוד כִּי כל בַּשָּׁמַיִם וּבָאָרֶץ: לְךָ ה' הַמַּמְלָכָה וְהַמִּתְנַשּא לְכל לְראשׁ: רומְמוּ ה' אֱלהֵינוּ וְהִשְׁתַּחֲווּ לַהֲדם רַגְלָיו קָדושׁ הוּא: רומְמוּ ה' אֱלהֵינוּ וְהִשְׁתַּחֲווּ לְהַר קָדְשׁו כִּי קָדושׁ ה' אֱלהֵינוּ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "אַב הָרַחֲמִים. הוּא יְרַחֵם עַם עֲמוּסִים וְיִזְכּור בְּרִית אֵיתָנִים. וְיַצִּיל נַפְשׁותֵינוּ מִן הַשָּׁעות הָרָעות. וְיִגְעַר בְּיֵצֶר הָרָע מִן הַנְּשוּאִים. וְיָחון אותָנוּ לִפְלֵיטַת עולָמִים. וִימַלֵּא מִשְׁאֲלותֵינוּ בְּמִדָּה טובָה יְשׁוּעָה וְרַחֲמִים:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "וְתִגָּלֶה וְתֵרָאֶה מַלְכוּתו עָלֵינוּ בִּזְמַן קָרוב. וְיָחון פְּלֵטָתֵנוּ וּפְלֵטַת עַמּו בֵּית יִשרָאֵל לְחֵן וּלְחֶסֶד וּלְרַחֲמִים וּלְרָצון וְנאמַר אָמֵן. הַכּל הָבוּ גדֶל לֵאלהֵינוּ וּתְנוּ כָבוד לַתּורָה. כּהֵן קְרָב יַעֲמד [פלוני בן פלוני] הַכּהֵן.",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              " בָּרוּךְ שֶׁנָּתַן תּורָה לְעַמּו יִשרָאֵל בִּקְדֻשָּׁתו:",
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        // TODO: add Torah Portion
+      ],
+    )
         : Container(),
 //     Ashrei
     Column(
@@ -1587,13 +1609,13 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
             )),
         (JewishCalendar.fromDateTime(DateTime.now()).isLamnatzeach())
             ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "לַמְנַצֵּחַ מִזְמור לְדָוִד: יַעַנְךָ יְהוָה בְּיום צָרָה. יְשַׂגֶּבְךָ שֵׁם אֱלהֵי יַעֲקב: יִשְׁלַח עֶזְרְךָ מִקּדֶשׁ. וּמִצִּיּון יִסְעָדֶךָּ: יִזְכּר כָּל מִנְחתֶיךָ. וְעולָתְךָ יְדַשְּׁנֶה סֶלָה: יִתֶּן לְךָ כִלְבָבֶךָ. וְכָל עֲצָתְךָ יְמַלֵּא: נְרַנְּנָה בִּישׁוּעָתֶךָ. וּבְשֵׁם אֱלהֵינוּ נִדְגּל. יְמַלֵּא יְהוָה כָּל מִשְׁאֲלותֶיךָ: עַתָּה יָדַעְתִּי. כִּי הושִׁיעַ יְהוָה מְשִׁיחו. יַעֲנֵהוּ מִשְּׁמֵי קָדְשׁו. בִּגְבוּרות יֵשַׁע יְמִינו: אֵלֶּה בָרֶכֶב וְאֵלֶּה בַסּוּסִים. וַאֲנַחְנוּ בְּשֵׁם יְהוָה אֱלהֵינוּ נַזְכִּיר: הֵמָּה כָּרְעוּ וְנָפָלוּ. וַאֲנַחְנוּ קַמְנוּ וַנִּתְעודָד: יְהוָה הושִׁיעָה הַמֶּלֶךְ יַעֲנֵנוּ בְיום קָרְאֵנוּ:",
-                  textAlign: TextAlign.justify,
-                  textDirection: TextDirection.rtl,
-                  style: GoogleFonts.suezOne(fontSize: 24),
-                ))
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "לַמְנַצֵּחַ מִזְמור לְדָוִד: יַעַנְךָ יְהוָה בְּיום צָרָה. יְשַׂגֶּבְךָ שֵׁם אֱלהֵי יַעֲקב: יִשְׁלַח עֶזְרְךָ מִקּדֶשׁ. וּמִצִּיּון יִסְעָדֶךָּ: יִזְכּר כָּל מִנְחתֶיךָ. וְעולָתְךָ יְדַשְּׁנֶה סֶלָה: יִתֶּן לְךָ כִלְבָבֶךָ. וְכָל עֲצָתְךָ יְמַלֵּא: נְרַנְּנָה בִּישׁוּעָתֶךָ. וּבְשֵׁם אֱלהֵינוּ נִדְגּל. יְמַלֵּא יְהוָה כָּל מִשְׁאֲלותֶיךָ: עַתָּה יָדַעְתִּי. כִּי הושִׁיעַ יְהוָה מְשִׁיחו. יַעֲנֵהוּ מִשְּׁמֵי קָדְשׁו. בִּגְבוּרות יֵשַׁע יְמִינו: אֵלֶּה בָרֶכֶב וְאֵלֶּה בַסּוּסִים. וַאֲנַחְנוּ בְּשֵׁם יְהוָה אֱלהֵינוּ נַזְכִּיר: הֵמָּה כָּרְעוּ וְנָפָלוּ. וַאֲנַחְנוּ קַמְנוּ וַנִּתְעודָד: יְהוָה הושִׁיעָה הַמֶּלֶךְ יַעֲנֵנוּ בְיום קָרְאֵנוּ:",
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            ))
             : Container(),
         Padding(
             padding: const EdgeInsets.all(8.0),
@@ -1643,8 +1665,8 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
                 child: ExpansionTile(
                   title: Center(
                       child: Text(
-                    "Kaddish",
-                  )),
+                        "Kaddish",
+                      )),
                   children: [
                     Text(
                       "יִתְגַּדֵּל וְיִתְקַדֵּשׁ שְׁמֵהּ רַבָּא.\nבְּעָלְמָא דִּי בְרָא כִּרְעוּתֵהּ וְיַמְלִיךְ מַלְכוּתֵהּ בְּחַיֵּיכון וּבְיומֵיכון וּבְחַיֵּי דְכָל בֵּית יִשרָאֵל, בַּעֲגָלָא וּבִזְמַן קָרִיב, וְאִמְרוּ אָמֵן.\nיְהֵא שְׁמֵהּ רַבָּא מְבָרַךְ לְעָלַם וּלְעָלְמֵי עָלְמַיָּא.\nיִתְבָּרַךְ וְיִשְׁתַּבַּח וְיִתְפָּאַר וְיִתְרומַם וְיִתְנַשׁא וְיִתְהַדַּר וְיִתְעַלֶּה שְׁמֵהּ דְּקֻדְשָׁא. בְּרִיךְ הוּא.\nלְעֵלָּא מִן כָּל בִּרְכָתָא וְשִׁירָתָא תֻּשְׁבְּחָתָא וְנֶחֱמָתָא דַּאֲמִירָן בְּעָלְמָא, וְאִמְרוּ אָמֵן.\n תִּתְקַבַּל צְלוֹתְהוֹן וּבָעוּתְהוֹן דְּכָל בֵּית יִשְׂרָאֵל קֳדָם אֲבוּהוֹן דִּי בִשְׁמַיָּא, וְאִמְרוּ אָמֵן.\n יְהֵא שְׁלָמָא רַבָּא מִן שְׁמַיָא וְחַיִּים עָלֵינו וְעַל כָּל יִשְׂרָאֵל וְאִמְרוּ אָמֵן:\n עוֹשֶׂה שָׁלוֹם בעשרת ימי תשובה: השלום בִּמְרוֹמָיו הוּא יַעֲשֶׂה שָׁלוֹם עָלֵינוּ וְעַל כָּל יִשְׂרָאֵל, וְאִמְרוּ אָמֵן:",
@@ -1755,7 +1777,7 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
   @override
   void initState() {
     super.initState();
-
+    print("initState");
     itemScrollController = ItemScrollController();
 
     if (IS_TAANITH || IS_TEN_DAYS) {
@@ -1806,14 +1828,14 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
   }
 
 //   TODO: Implement autoscoll
-  void autoScroll(){
+  void autoScroll() {
 //        itemScrollController.scrollTo(index:_scrollIndex+1,
 //            duration: Duration(seconds: 30),
 //            alignment: 0,
 //            curve: Curves.linear);
   }
 
-  setDropDownMenuItem(int index){
+  setDropDownMenuItem(int index) {
     if (index == 6) {
       if (IS_HALLEL) {
         setState(() {
@@ -1822,8 +1844,7 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
       }
       else
         setDropDownMenuItem(++index);
-
-    }else if (index == 7) {
+    } else if (index == 7) {
       if (IS_TAANITH || IS_TEN_DAYS) {
         setState(() {
           _value = index;
@@ -1847,7 +1868,7 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
       }
       else
         setDropDownMenuItem(++index);
-    }else {
+    } else {
       setState(() {
         _value = index;
       });
@@ -1856,7 +1877,6 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
 
   @override
   Widget build(BuildContext context) {
-
     itemPositionsListener.itemPositions.addListener(() {
       if (itemPositionsListener.itemPositions.value.isNotEmpty) {
         int currentIndex = itemPositionsListener.itemPositions.value
@@ -1875,7 +1895,9 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
     });
 
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme
+          .of(context)
+          .primaryColor,
       appBar: AppBar(
         leading: Builder(
           builder: (context) {
@@ -1912,18 +1934,16 @@ class _MorningPrayerPageState extends State<MorningPrayerPage> {
         },
         child: Center(
             child: ScrollablePositionedList.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: morningPrayers.length,
-          itemBuilder: (context, index) => morningPrayers[index],
-          itemScrollController: itemScrollController,
-          itemPositionsListener: itemPositionsListener,
-        )),
+              initialScrollIndex: initalIndex,
+              initialAlignment: initialAlignement,
+              scrollDirection: Axis.vertical,
+              itemCount: morningPrayers.length,
+              itemBuilder: (context, index) => morningPrayers[index],
+              itemScrollController: itemScrollController,
+              itemPositionsListener: itemPositionsListener,
+            )),
       ),
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

@@ -24,7 +24,7 @@ class PageChanger extends ChangeNotifier{
     NightPrayerPage(),
   ];
 
-  int _chosenPageIndex = 0;
+  int _chosenPageIndex = 1;
 
   PageChanger();
 

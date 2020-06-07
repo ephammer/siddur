@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,7 +30,7 @@ class CustomDrawerState extends State<CustomDrawer>
   static const double minDragStartEdge = 60;
   static const double maxDragStartEdge = maxSlide - 16;
   AnimationController _animationController;
-  bool _canBeDragged = false;
+  bool _canBeDragged = true;
 
   Widget mainScreen;
 
@@ -92,18 +94,19 @@ class CustomDrawerState extends State<CustomDrawer>
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
                     onTap: _animationController.isCompleted ? close : null,
-                    child: _animationController.value != 0
-                        ? Card(
+                    child: Card(
+                      margin: EdgeInsets.all(0),
                             elevation: _animationController.value * 4,
-                            shape: RoundedRectangleBorder(
+                            shape: _animationController.value != 0
+                                ? RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(35.0),
-                            ),
+                            ):ContinuousRectangleBorder(),
                             child: ClipRRect(
                               child: child,
-                              borderRadius: BorderRadius.circular(35.0),
+                              borderRadius: _animationController.value != 0
+                                  ? BorderRadius.circular(35.0):BorderRadius.circular(0),
                             ),
                           )
-                        : child,
                   ),
                 ),
               ],
@@ -328,6 +331,7 @@ class MyDrawer extends StatelessWidget {
       ),
     );
   }
+
   saveThemePreference(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isThemeBrightnessDark', value);
