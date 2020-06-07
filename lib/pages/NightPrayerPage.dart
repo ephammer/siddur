@@ -131,7 +131,7 @@ class _NightPageState extends State<NightPrayerPage> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "מַלְכוּתְךָ רָאוּ בָנֶיךָ. בּוקֵעַ יָם לִפְנֵי משֶׁה. זֶה אֵלִי עָנוּ. וְאָמְרוּ:",
-              textAlign: TextAlign.justify,
+              textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               style: GoogleFonts.suezOne(fontSize: 24),
             )),
@@ -139,6 +139,14 @@ class _NightPageState extends State<NightPrayerPage> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "ה' יִמְלךְ לְעלָם וָעֶד:",
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+              style: GoogleFonts.suezOne(fontSize: 24),
+            )),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "וְנֶאֱמַר. כִּי פָדָה ה' אֶת יַעֲקב. וּגְאָלו מִיַּד חָזָק מִמֶּנּוּ: בָּרוּךְ אַתָּה ה'. גָּאַל יִשרָאֵל:",
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               style: GoogleFonts.suezOne(fontSize: 24),
