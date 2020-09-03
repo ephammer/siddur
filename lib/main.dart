@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp>{
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return(_isDark==null)?Center(child: CircularProgressIndicator(),): ChangeNotifierProvider<ThemeChanger>(
+    return(_isDark==null)?Container(): ChangeNotifierProvider<ThemeChanger>(
       create: (_) => ThemeChanger(_isDark),
       child: ChangeNotifierProvider<PageChanger>(
           create: (_) => PageChanger(),

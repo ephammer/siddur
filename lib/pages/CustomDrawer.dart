@@ -45,7 +45,7 @@ class CustomDrawerState extends State<CustomDrawer>
 
     );
     WidgetsBinding.instance.addObserver(this);
-
+    open();
   }
 
   void close() => _animationController.reverse();
@@ -311,18 +311,47 @@ class MyDrawer extends StatelessWidget {
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: IconButton(
-                        icon: Icon(Icons.lightbulb_outline),
-                        onPressed: () async{
+                    child: ListTile(
+                        onTap: () {
+                          // _pageChanger.setPageIndex(6);
+                          // CustomDrawer.of(context).close();
+
+                        },
+                        leading: Icon(Icons.settings),
+                        title: Text("Settings")
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ListTile(
+                        onTap: () async{
                           _themeChanger.switchThem();
                           await saveThemePreference(_themeChanger.isDark());
 
                         },
-                      ),
+                        leading: Icon(_themeChanger.isDark()?Icons.lightbulb:Icons.lightbulb_outline),
+                        title: Text("Switch Theme")
                     ),
-                  )
+                  ),
+                  // Divider(
+                  //   thickness: 1,
+                  //   indent: 8,
+                  //   endIndent: 8,
+                  // ),
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8),
+                  //     child: IconButton(
+                  //       icon: Icon(_themeChanger.isDark()?Icons.lightbulb:Icons.lightbulb_outline),
+                  //       onPressed: () async{
+                  //         _themeChanger.switchThem();
+                  //         await saveThemePreference(_themeChanger.isDark());
+                  //
+                  //       },
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
